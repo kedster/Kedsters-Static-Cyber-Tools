@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHOIS Lookup Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 WHOIS Lookup</h1>
+        
+        <div class="search-container">
+            <div class="input-group">
+                <input type="text" id="domainInput" placeholder="Enter domain name (e.g., google.com)" />
+            </div>
+            <button class="search-btn" id="searchBtn" onclick="performWhoisLookup()">
+                <span id="btnText">Lookup</span>
+            </button>
+        </div>
+
+        <div class="examples">
+            <p>Try these examples:</p>
+            <div class="example-domains">
+                <span class="example-domain" onclick="fillDomain('google.com')">google.com</span>
+                <span class="example-domain" onclick="fillDomain('github.com')">github.com</span>
+                <span class="example-domain" onclick="fillDomain('stackoverflow.com')">stackoverflow.com</span>
+                <span class="example-domain" onclick="fillDomain('reddit.com')">reddit.com</span>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Looking up domain information...</p>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="results" id="results">
+            <h3>
+                <div class="domain-icon"></div>
+                <span id="domainTitle">Domain Information</span>
+            </h3>
+            <div class="whois-data" id="whoisData"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
