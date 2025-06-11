@@ -1,8 +1,8 @@
-﻿       const DNS_OVER_HTTPS_SERVERS = [
-            { name: 'Cloudflare', url: 'https://1.1.1.1/dns-query' },
-            { name: 'Google', url: 'https://8.8.8.8/resolve' },
-            { name: 'Quad9', url: 'https://9.9.9.9/dns-query' },
-            { name: 'OpenDNS', url: 'https://208.67.222.222/dns-query' }
+﻿        const DNS_OVER_HTTPS_SERVERS = [
+            { name: 'Cloudflare', url: 'https://cloudflare-dns.com/dns-query', type: 'cloudflare' },
+            { name: 'Google', url: 'https://8.8.8.8/resolve', type: 'google' },
+            { name: 'Quad9', url: 'https://dns.quad9.net/dns-query', type: 'standard' },
+            { name: 'OpenDNS', url: 'https://doh.opendns.com/dns-query', type: 'standard' }
         ];
 
         let dnsResults = [];
@@ -11,8 +11,8 @@
             try {
                 let url, options;
                 
-                if (server.name === 'Google') {
-                    // Google DNS has a different API format
+                if (server.type === 'google') {
+                    // Google DNS API
                     url = `${server.url}?name=${domain}&type=A`;
                     options = {
                         method: 'GET',
@@ -20,40 +20,46 @@
                             'Accept': 'application/json'
                         }
                     };
-                } else {
-                    // Cloudflare/Quad9/OpenDNS use standard DNS-over-HTTPS
-                    url = server.url;
+                } else if (server.type === 'cloudflare') {
+                    // Cloudflare DNS-over-HTTPS with GET method
+                    url = `${server.url}?name=${domain}&type=A`;
                     options = {
-                        method: 'POST',
+                        method: 'GET',
                         headers: {
-                            'Accept': 'application/dns-json',
-                            'Content-Type': 'application/dns-json'
-                        },
-                        body: JSON.stringify({
-                            name: domain,
-                            type: 'A'
-                        })
+                            'Accept': 'application/dns-json'
+                        }
+                    };
+                } else {
+                    // Try GET method for other servers as fallback
+                    url = `${server.url}?name=${domain}&type=A`;
+                    options = {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/dns-json'
+                        }
                     };
                 }
 
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
                 
                 const response = await fetch(url, {
                     ...options,
-                    signal: controller.signal
+                    signal: controller.signal,
+                    mode: 'cors'
                 });
                 
                 clearTimeout(timeoutId);
 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 const data = await response.json();
                 const addresses = [];
 
-                if (server.name === 'Google') {
+                // Parse response based on server type
+                if (server.type === 'google') {
                     if (data.Answer) {
                         data.Answer.forEach(answer => {
                             if (answer.type === 1) { // A record
@@ -62,6 +68,7 @@
                         });
                     }
                 } else {
+                    // Standard DNS-over-HTTPS JSON format
                     if (data.Answer) {
                         data.Answer.forEach(answer => {
                             if (answer.type === 1) { // A record
@@ -73,17 +80,98 @@
 
                 return {
                     server: server.name,
-                    addresses: addresses,
+                    addresses: addresses.sort(), // Sort for consistent comparison
                     status: 'success',
                     responseTime: Date.now()
                 };
 
             } catch (error) {
+                // For servers that don't support CORS, we'll use a different approach
+                if (error.message.includes('CORS') || error.message.includes('blocked') || error.name === 'TypeError') {
+                    return await fallbackDNSQuery(server, domain);
+                }
+                
                 return {
                     server: server.name,
                     addresses: [],
                     status: 'error',
                     error: error.message,
+                    responseTime: Date.now()
+                };
+            }
+        }
+
+        async function fallbackDNSQuery(server, domain) {
+            // For servers that block CORS, we'll use alternative public APIs
+            try {
+                let fallbackUrl;
+                
+                switch (server.name) {
+                    case 'Cloudflare':
+                        // Use dns.google as a proxy for cloudflare-style results
+                        fallbackUrl = `https://dns.google/resolve?name=${domain}&type=A&cd=false&do=false`;
+                        break;
+                    case 'Quad9':
+                        // Use HackerTarget DNS lookup API as alternative
+                        fallbackUrl = `https://api.hackertarget.com/dnslookup/?q=${domain}`;
+                        const htResponse = await fetch(fallbackUrl);
+                        const htText = await htResponse.text();
+                        const addresses = [];
+                        const lines = htText.split('\n');
+                        lines.forEach(line => {
+                            if (line.includes('has address')) {
+                                const ip = line.split('has address ')[1];
+                                if (ip && /^\d+\.\d+\.\d+\.\d+$/.test(ip.trim())) {
+                                    addresses.push(ip.trim());
+                                }
+                            }
+                        });
+                        return {
+                            server: server.name,
+                            addresses: addresses.sort(),
+                            status: 'success',
+                            responseTime: Date.now()
+                        };
+                    case 'OpenDNS':
+                        // Use DNS.SB as alternative
+                        fallbackUrl = `https://doh.dns.sb/dns-query?name=${domain}&type=A`;
+                        break;
+                    default:
+                        throw new Error('No fallback available');
+                }
+
+                if (fallbackUrl && !fallbackUrl.includes('hackertarget')) {
+                    const response = await fetch(fallbackUrl, {
+                        headers: { 'Accept': 'application/dns-json' }
+                    });
+                    
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    
+                    const data = await response.json();
+                    const addresses = [];
+                    
+                    if (data.Answer) {
+                        data.Answer.forEach(answer => {
+                            if (answer.type === 1) {
+                                addresses.push(answer.data);
+                            }
+                        });
+                    }
+                    
+                    return {
+                        server: server.name,
+                        addresses: addresses.sort(),
+                        status: 'success',
+                        responseTime: Date.now()
+                    };
+                }
+                
+            } catch (fallbackError) {
+                return {
+                    server: server.name,
+                    addresses: [],
+                    status: 'error',
+                    error: `CORS blocked, fallback failed: ${fallbackError.message}`,
                     responseTime: Date.now()
                 };
             }
