@@ -1,65 +1,31 @@
-﻿        const DNS_OVER_HTTPS_SERVERS = [
-            { name: 'Cloudflare', url: 'https://cloudflare-dns.com/dns-query', type: 'cloudflare' },
-            { name: 'Google', url: 'https://8.8.8.8/resolve', type: 'google' },
-            { name: 'Quad9', url: 'https://dns.quad9.net/dns-query', type: 'standard' },
-            { name: 'OpenDNS', url: 'https://doh.opendns.com/dns-query', type: 'standard' }
+﻿        const DNS_SERVERS = [
+            { name: 'Google Primary', url: 'https://dns.google/resolve', type: 'google' },
+            { name: 'Google Secondary', url: 'https://8.8.4.4/resolve', type: 'google' },
+            { name: 'HackerTarget', url: 'https://api.hackertarget.com/dnslookup/', type: 'hackertarget' },
+            { name: 'DNS.SB', url: 'https://doh.dns.sb/dns-query', type: 'doh' }
         ];
 
         let dnsResults = [];
 
         async function queryDNS(server, domain) {
             try {
-                let url, options;
-                
-                if (server.type === 'google') {
-                    // Google DNS API
-                    url = `${server.url}?name=${domain}&type=A`;
-                    options = {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    };
-                } else if (server.type === 'cloudflare') {
-                    // Cloudflare DNS-over-HTTPS with GET method
-                    url = `${server.url}?name=${domain}&type=A`;
-                    options = {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/dns-json'
-                        }
-                    };
-                } else {
-                    // Try GET method for other servers as fallback
-                    url = `${server.url}?name=${domain}&type=A`;
-                    options = {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/dns-json'
-                        }
-                    };
-                }
-
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 8000);
                 
-                const response = await fetch(url, {
-                    ...options,
-                    signal: controller.signal,
-                    mode: 'cors'
-                });
-                
-                clearTimeout(timeoutId);
+                let response, data, addresses = [];
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                const addresses = [];
-
-                // Parse response based on server type
                 if (server.type === 'google') {
+                    // Google DNS API
+                    const url = `${server.url}?name=${domain}&type=A&cd=0&do=0`;
+                    response = await fetch(url, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' },
+                        signal: controller.signal
+                    });
+                    
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    
+                    data = await response.json();
                     if (data.Answer) {
                         data.Answer.forEach(answer => {
                             if (answer.type === 1) { // A record
@@ -67,8 +33,41 @@
                             }
                         });
                     }
-                } else {
-                    // Standard DNS-over-HTTPS JSON format
+                    
+                } else if (server.type === 'hackertarget') {
+                    // HackerTarget DNS lookup
+                    const url = `${server.url}?q=${domain}`;
+                    response = await fetch(url, {
+                        method: 'GET',
+                        signal: controller.signal
+                    });
+                    
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    
+                    const text = await response.text();
+                    const lines = text.split('\n');
+                    
+                    lines.forEach(line => {
+                        if (line.includes('has address')) {
+                            const match = line.match(/has address (\d+\.\d+\.\d+\.\d+)/);
+                            if (match) {
+                                addresses.push(match[1]);
+                            }
+                        }
+                    });
+                    
+                } else if (server.type === 'doh') {
+                    // DNS over HTTPS (DNS.SB)
+                    const url = `${server.url}?name=${domain}&type=A`;
+                    response = await fetch(url, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/dns-json' },
+                        signal: controller.signal
+                    });
+                    
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    
+                    data = await response.json();
                     if (data.Answer) {
                         data.Answer.forEach(answer => {
                             if (answer.type === 1) { // A record
@@ -77,101 +76,22 @@
                         });
                     }
                 }
+
+                clearTimeout(timeoutId);
 
                 return {
                     server: server.name,
-                    addresses: addresses.sort(), // Sort for consistent comparison
+                    addresses: addresses.sort(),
                     status: 'success',
                     responseTime: Date.now()
                 };
 
             } catch (error) {
-                // For servers that don't support CORS, we'll use a different approach
-                if (error.message.includes('CORS') || error.message.includes('blocked') || error.name === 'TypeError') {
-                    return await fallbackDNSQuery(server, domain);
-                }
-                
                 return {
                     server: server.name,
                     addresses: [],
                     status: 'error',
-                    error: error.message,
-                    responseTime: Date.now()
-                };
-            }
-        }
-
-        async function fallbackDNSQuery(server, domain) {
-            // For servers that block CORS, we'll use alternative public APIs
-            try {
-                let fallbackUrl;
-                
-                switch (server.name) {
-                    case 'Cloudflare':
-                        // Use dns.google as a proxy for cloudflare-style results
-                        fallbackUrl = `https://dns.google/resolve?name=${domain}&type=A&cd=false&do=false`;
-                        break;
-                    case 'Quad9':
-                        // Use HackerTarget DNS lookup API as alternative
-                        fallbackUrl = `https://api.hackertarget.com/dnslookup/?q=${domain}`;
-                        const htResponse = await fetch(fallbackUrl);
-                        const htText = await htResponse.text();
-                        const addresses = [];
-                        const lines = htText.split('\n');
-                        lines.forEach(line => {
-                            if (line.includes('has address')) {
-                                const ip = line.split('has address ')[1];
-                                if (ip && /^\d+\.\d+\.\d+\.\d+$/.test(ip.trim())) {
-                                    addresses.push(ip.trim());
-                                }
-                            }
-                        });
-                        return {
-                            server: server.name,
-                            addresses: addresses.sort(),
-                            status: 'success',
-                            responseTime: Date.now()
-                        };
-                    case 'OpenDNS':
-                        // Use DNS.SB as alternative
-                        fallbackUrl = `https://doh.dns.sb/dns-query?name=${domain}&type=A`;
-                        break;
-                    default:
-                        throw new Error('No fallback available');
-                }
-
-                if (fallbackUrl && !fallbackUrl.includes('hackertarget')) {
-                    const response = await fetch(fallbackUrl, {
-                        headers: { 'Accept': 'application/dns-json' }
-                    });
-                    
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    
-                    const data = await response.json();
-                    const addresses = [];
-                    
-                    if (data.Answer) {
-                        data.Answer.forEach(answer => {
-                            if (answer.type === 1) {
-                                addresses.push(answer.data);
-                            }
-                        });
-                    }
-                    
-                    return {
-                        server: server.name,
-                        addresses: addresses.sort(),
-                        status: 'success',
-                        responseTime: Date.now()
-                    };
-                }
-                
-            } catch (fallbackError) {
-                return {
-                    server: server.name,
-                    addresses: [],
-                    status: 'error',
-                    error: `CORS blocked, fallback failed: ${fallbackError.message}`,
+                    error: error.name === 'AbortError' ? 'Request timeout' : error.message,
                     responseTime: Date.now()
                 };
             }
@@ -208,7 +128,7 @@
             const startTime = Date.now();
 
             // Query all DNS servers concurrently
-            const promises = DNS_OVER_HTTPS_SERVERS.map(server => queryDNS(server, domain));
+            const promises = DNS_SERVERS.map(server => queryDNS(server, domain));
             const results = await Promise.all(promises);
 
             const endTime = Date.now();
