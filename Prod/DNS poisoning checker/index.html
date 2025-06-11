@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Poisoning Checker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> DNS Poisoning Checker</h1>
+            <p>Detect DNS tampering by comparing responses from multiple DNS servers</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <div class="input-group">
+                    <input type="text" id="domainInput" placeholder="Enter domain (e.g., google.com)" value="google.com">
+                    <button class="check-btn" id="checkBtn" onclick="checkDNS()">Check DNS</button>
+                </div>
+            </div>
+            
+            <div id="results" class="results"></div>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html>
