@@ -1,0 +1,20 @@
+name = "kedsters-static-cyber-tools"
+main = "src/index.js"
+compatibility_date = "2023-12-01"
+
+[env.production]
+name = "kedsters-static-cyber-tools"
+routes = [
+  { pattern = "cybertools.kedster.com/*", zone_name = "kedster.com" }
+]
+
+[env.development]
+name = "kedsters-static-cyber-tools-dev"
+
+[[env.production.rules]]
+type = "ESModule"
+globs = ["**/*.js"]
+
+[[env.development.rules]]
+type = "ESModule"
+globs = ["**/*.js"]

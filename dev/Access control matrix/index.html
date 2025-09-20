@@ -1,12 +1,196 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Access control matrix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Control Matrix Manager</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Access control matrix</h1>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <h1>📋 Access Control Matrix Manager</h1>
+        <p class="subtitle">Visual access control matrix for managing permissions, roles, and resources</p>
+        
+        <div class="warning-banner">
+            <strong>⚠️ Security Management Tool:</strong> Use this tool to design and audit access control policies.
+        </div>
+
+        <div class="management-section">
+            <div class="management-tabs">
+                <button class="tab-btn active" onclick="showTab('roles')">👥 Roles</button>
+                <button class="tab-btn" onclick="showTab('resources')">📁 Resources</button>
+                <button class="tab-btn" onclick="showTab('permissions')">🔑 Permissions</button>
+                <button class="tab-btn" onclick="showTab('matrix')">🗃️ Matrix View</button>
+            </div>
+            
+            <!-- Roles Tab -->
+            <div id="roles-tab" class="tab-content active">
+                <div class="section-header">
+                    <h3>Role Management</h3>
+                    <button onclick="showAddRoleModal()" class="add-btn">+ Add Role</button>
+                </div>
+                <div class="roles-grid" id="rolesGrid">
+                    <!-- Roles will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Resources Tab -->
+            <div id="resources-tab" class="tab-content">
+                <div class="section-header">
+                    <h3>Resource Management</h3>
+                    <button onclick="showAddResourceModal()" class="add-btn">+ Add Resource</button>
+                </div>
+                <div class="resources-grid" id="resourcesGrid">
+                    <!-- Resources will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Permissions Tab -->
+            <div id="permissions-tab" class="tab-content">
+                <div class="section-header">
+                    <h3>Permission Assignment</h3>
+                </div>
+                <div class="permissions-manager" id="permissionsManager">
+                    <!-- Permission assignment UI will be here -->
+                </div>
+            </div>
+            
+            <!-- Matrix Tab -->
+            <div id="matrix-tab" class="tab-content">
+                <div class="section-header">
+                    <h3>Access Control Matrix</h3>
+                    <div class="matrix-actions">
+                        <button onclick="exportMatrix()" class="export-btn">📤 Export</button>
+                        <button onclick="importMatrix()" class="import-btn">📥 Import</button>
+                        <button onclick="validateMatrix()" class="validate-btn">✅ Validate</button>
+                    </div>
+                </div>
+                <div class="matrix-display" id="matrixDisplay">
+                    <!-- Access control matrix will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-section">
+            <h3>📊 Access Control Analytics</h3>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="analytics-value" id="totalRoles">0</div>
+                    <div class="analytics-label">Total Roles</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-value" id="totalResources">0</div>
+                    <div class="analytics-label">Total Resources</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-value" id="totalPermissions">0</div>
+                    <div class="analytics-label">Permissions</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-value" id="matrixCoverage">0%</div>
+                    <div class="analytics-label">Matrix Coverage</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <div class="modal" id="addRoleModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>➕ Add New Role</h4>
+                    <span class="close" onclick="hideModal('addRoleModal')">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="roleName">Role Name:</label>
+                        <input type="text" id="roleName" placeholder="e.g., Manager, Editor, Viewer" />
+                    </div>
+                    <div class="form-group">
+                        <label for="roleDescription">Description:</label>
+                        <textarea id="roleDescription" rows="3" placeholder="Describe the role's responsibilities"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="roleLevel">Access Level:</label>
+                        <select id="roleLevel">
+                            <option value="1">Level 1 - Basic</option>
+                            <option value="2">Level 2 - Standard</option>
+                            <option value="3">Level 3 - Advanced</option>
+                            <option value="4">Level 4 - Administrative</option>
+                            <option value="5">Level 5 - System</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="addRole()" class="primary-btn">Add Role</button>
+                    <button onclick="hideModal('addRoleModal')" class="secondary-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="addResourceModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>➕ Add New Resource</h4>
+                    <span class="close" onclick="hideModal('addResourceModal')">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="resourceName">Resource Name:</label>
+                        <input type="text" id="resourceName" placeholder="e.g., User Database, Reports, Settings" />
+                    </div>
+                    <div class="form-group">
+                        <label for="resourceType">Resource Type:</label>
+                        <select id="resourceType">
+                            <option value="data">Data/Database</option>
+                            <option value="file">File/Document</option>
+                            <option value="system">System Component</option>
+                            <option value="api">API Endpoint</option>
+                            <option value="ui">User Interface</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="resourceSensitivity">Sensitivity Level:</label>
+                        <select id="resourceSensitivity">
+                            <option value="public">Public</option>
+                            <option value="internal">Internal</option>
+                            <option value="confidential">Confidential</option>
+                            <option value="restricted">Restricted</option>
+                            <option value="top-secret">Top Secret</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="addResource()" class="primary-btn">Add Resource</button>
+                    <button onclick="hideModal('addResourceModal')" class="secondary-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="educational-info">
+            <h3>🎓 Access Control Matrix Best Practices</h3>
+            <div class="best-practices">
+                <div class="practice-item">
+                    <strong>Regular Audits:</strong> Review and audit the access control matrix regularly to ensure permissions are up-to-date.
+                </div>
+                <div class="practice-item">
+                    <strong>Principle of Least Privilege:</strong> Grant users only the minimum permissions necessary for their role.
+                </div>
+                <div class="practice-item">
+                    <strong>Segregation of Duties:</strong> Ensure that critical operations require multiple people or roles.
+                </div>
+                <div class="practice-item">
+                    <strong>Clear Documentation:</strong> Document all roles, resources, and the reasoning behind permission assignments.
+                </div>
+                <div class="practice-item">
+                    <strong>Automated Validation:</strong> Use automated tools to validate that the access control matrix is properly implemented.
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,25 @@
+# Kedster's Static Cyber Tools - Cloudflare Pages Routes
+
+# Main directory page
+/
+/index.html
+
+# Production tools
+/Prod/*
+
+# Development tools  
+/dev/*
+
+# Featured tools (alias for dev tools)
+/tools/*
+
+# Static assets
+/styles.css
+/script.js
+/shared/*
+
+# API endpoints (handled by Worker)
+/api/*
+
+# Fallback - serve directory page for any unmatched routes
+/*

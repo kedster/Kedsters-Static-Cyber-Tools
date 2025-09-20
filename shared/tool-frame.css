@@ -1,0 +1,149 @@
+/* Shared Tool Frame Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.tool-frame {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.tool-nav {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-left,
+.nav-center,
+.nav-right {
+    flex: 1;
+}
+
+.nav-center {
+    text-align: center;
+}
+
+.nav-right {
+    text-align: right;
+}
+
+.back-home {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.back-home:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-5px);
+}
+
+.tool-breadcrumb {
+    font-size: 1.1em;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.auth-placeholder {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: inline-block;
+}
+
+.auth-info {
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.tool-content {
+    flex: 1;
+    padding: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: calc(100vh - 120px);
+}
+
+.tool-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    margin: 20px auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.tool-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.tool-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.tool-sections {
+    margin-top: 30px;
+}
+
+.tool-footer {
+    background: #2d3436;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9em;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .tool-nav {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .nav-left,
+    .nav-center,
+    .nav-right {
+        flex: none;
+        text-align: center;
+    }
+    
+    .tool-container {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .tool-container h1 {
+        font-size: 2em;
+    }
+}
