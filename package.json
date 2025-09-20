@@ -1,6 +1,7 @@
 {
   "name": "kedsters-static-cyber-tools",
   "version": "1.0.0",
+  "type": "module",
   "description": "Comprehensive cybersecurity testing and educational toolkit with unified directory structure",
   "main": "src/index.js",
   "scripts": {
@@ -8,7 +9,12 @@
     "deploy": "wrangler deploy",
     "pages:dev": "wrangler pages dev .",
     "pages:deploy": "wrangler pages deploy .",
-    "serve": "python3 -m http.server 8000"
+    "serve": "python3 -m http.server 8000",
+    "verify": "node scripts/verify-cloudflare.js",
+    "verify:dns": "node scripts/verify-cloudflare.js --dns",
+    "verify:worker": "node scripts/verify-cloudflare.js --worker",
+    "verify:homepage": "node scripts/verify-cloudflare.js --homepage",
+    "troubleshoot": "node scripts/verify-cloudflare.js --troubleshoot"
   },
   "repository": {
     "type": "git",
@@ -26,6 +32,9 @@
   "license": "MIT",
   "devDependencies": {
     "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   },
   "engines": {
     "node": ">=16"
