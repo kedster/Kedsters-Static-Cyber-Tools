@@ -1,0 +1,33 @@
+{
+  "name": "kedsters-static-cyber-tools",
+  "version": "1.0.0",
+  "description": "Comprehensive cybersecurity testing and educational toolkit with unified directory structure",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "pages:dev": "wrangler pages dev .",
+    "pages:deploy": "wrangler pages deploy .",
+    "serve": "python3 -m http.server 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kedster/Kedsters-Static-Cyber-Tools.git"
+  },
+  "keywords": [
+    "cybersecurity",
+    "penetration-testing",
+    "security-tools",
+    "educational",
+    "cloudflare-workers",
+    "cloudflare-pages"
+  ],
+  "author": "Kedster",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

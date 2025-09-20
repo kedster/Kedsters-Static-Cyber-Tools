@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kedster's Static Cyber Tools - Directory</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <header class="main-header">
+            <h1>🛡️ Kedster's Static Cyber Tools</h1>
+            <p class="subtitle">Comprehensive cybersecurity testing and educational toolkit</p>
+        </header>
+
+        <div class="tools-directory">
+            <div class="section-header">
+                <h2>🚀 Production Tools</h2>
+                <p>Fully operational cybersecurity tools ready for professional use</p>
+            </div>
+            
+            <div class="tools-grid" id="productionTools">
+                <!-- Production tools will be populated by JavaScript -->
+            </div>
+
+            <div class="section-header">
+                <h2>🔬 Featured Development Tools</h2>
+                <p>Advanced cybersecurity tools with comprehensive functionality</p>
+            </div>
+            
+            <div class="tools-grid featured-tools" id="featuredTools">
+                <!-- Featured dev tools will be populated by JavaScript -->
+            </div>
+
+            <div class="section-header">
+                <h2>⚡ Development Tools</h2>
+                <p>Extensive collection of cybersecurity tools in development</p>
+            </div>
+            
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search tools..." />
+                    <div class="filter-tags">
+                        <span class="filter-tag active" data-category="all">All</span>
+                        <span class="filter-tag" data-category="authentication">Authentication</span>
+                        <span class="filter-tag" data-category="network">Network</span>
+                        <span class="filter-tag" data-category="web">Web Security</span>
+                        <span class="filter-tag" data-category="analysis">Analysis</span>
+                        <span class="filter-tag" data-category="testing">Testing</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tools-grid dev-tools" id="devTools">
+                <!-- Development tools will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number" id="totalTools">0</div>
+                <div class="stat-label">Total Tools</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="productionCount">0</div>
+                <div class="stat-label">Production Ready</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="devCount">0</div>
+                <div class="stat-label">In Development</div>
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <p>&copy; 2024 Kedster's Static Cyber Tools - Educational and Professional Cybersecurity Toolkit</p>
+            <p>⚠️ Use these tools responsibly and only on systems you own or have permission to test</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
