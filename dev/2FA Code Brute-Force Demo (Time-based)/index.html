@@ -1,12 +1,122 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2FA Code Brute-Force Demo (Time-based)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>2FA Code Brute-Force Demo (Time-based)</h1>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <h1>🛡️ 2FA Code Brute-Force Demo</h1>
+        <p class="subtitle">Educational demonstration of Time-based OTP (TOTP) brute force vulnerabilities</p>
+        
+        <div class="warning-banner">
+            <strong>⚠️ Educational Purpose Only:</strong> This tool is for cybersecurity education and authorized penetration testing only.
+        </div>
+
+        <div class="demo-section">
+            <h3>Setup Target 2FA</h3>
+            <div class="input-group">
+                <label for="secretKey">TOTP Secret Key (Base32):</label>
+                <input type="text" id="secretKey" placeholder="e.g., JBSWY3DPEHPK3PXP" />
+                <button onclick="generateRandomSecret()">Generate Random</button>
+            </div>
+            
+            <div class="input-group">
+                <label for="timeWindow">Time Window (seconds):</label>
+                <select id="timeWindow">
+                    <option value="30">30 seconds (standard)</option>
+                    <option value="60">60 seconds</option>
+                    <option value="90">90 seconds</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>Current Valid Code</h3>
+            <div class="totp-display">
+                <div class="current-code" id="currentCode">------</div>
+                <div class="time-remaining">
+                    <div class="countdown-bar">
+                        <div class="countdown-fill" id="countdownFill"></div>
+                    </div>
+                    <span id="timeRemaining">--</span>s remaining
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>Brute Force Attack Simulation</h3>
+            <div class="attack-controls">
+                <div class="input-group">
+                    <label for="attackMode">Attack Mode:</label>
+                    <select id="attackMode">
+                        <option value="sequential">Sequential (000000-999999)</option>
+                        <option value="dictionary">Common Patterns</option>
+                        <option value="time-based">Time Window Focused</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="attackSpeed">Attack Speed:</label>
+                    <select id="attackSpeed">
+                        <option value="100">100 attempts/sec</option>
+                        <option value="500">500 attempts/sec</option>
+                        <option value="1000">1000 attempts/sec (max)</option>
+                    </select>
+                </div>
+                
+                <button id="startAttack" onclick="startBruteForce()" class="attack-btn">Start Attack</button>
+                <button id="stopAttack" onclick="stopBruteForce()" class="stop-btn" disabled>Stop Attack</button>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div class="attack-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="attemptCount">0</div>
+                    <div class="stat-label">Attempts</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="attackTime">0</div>
+                    <div class="stat-label">Time (s)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="attackRate">0</div>
+                    <div class="stat-label">Rate/sec</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="successCount">0</div>
+                    <div class="stat-label">Matches</div>
+                </div>
+            </div>
+            
+            <div class="attack-log" id="attackLog"></div>
+        </div>
+
+        <div class="educational-info">
+            <h3>🎓 Security Insights</h3>
+            <div class="insights">
+                <div class="insight-item">
+                    <strong>Time Window Vulnerability:</strong> TOTP codes have a validity window (usually 30s), creating a race condition opportunity.
+                </div>
+                <div class="insight-item">
+                    <strong>Rate Limiting:</strong> Proper 2FA implementations should have rate limiting to prevent brute force attacks.
+                </div>
+                <div class="insight-item">
+                    <strong>Account Lockouts:</strong> Multiple failed attempts should temporarily lock accounts.
+                </div>
+                <div class="insight-item">
+                    <strong>Monitoring:</strong> Unusual authentication patterns should trigger security alerts.
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
