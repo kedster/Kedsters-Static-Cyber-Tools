@@ -1,12 +1,221 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Regex Tester</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Tester - Kedster's Static Cyber Tools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #a29bfe, #6c5ce7); min-height: 100vh; color: #333; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .auth-placeholder { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: white; }
+        .tool-header { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px; text-align: center; }
+        .tool-header h1 { font-size: 2.5rem; color: #a29bfe; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; color: #666; margin-bottom: 20px; }
+        .back-home { display: inline-block; padding: 10px 20px; background: #a29bfe; color: white; text-decoration: none; border-radius: 25px; transition: all 0.3s ease; }
+        .tool-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .tool-section h3 { font-size: 1.5rem; color: #a29bfe; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; }
+        .input-group input, .input-group textarea { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-family: 'Courier New', monospace; transition: all 0.3s ease; }
+        .flags-container { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
+        .flag-checkbox { display: flex; align-items: center; gap: 5px; }
+        .results-container { background: #f8fafc; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        .match-item { background: white; padding: 10px; margin: 5px 0; border-radius: 6px; border-left: 4px solid #a29bfe; font-family: 'Courier New', monospace; }
+        .match-highlight { background: #fff3cd; padding: 2px 4px; border-radius: 3px; font-weight: bold; }
+        .stats { display: grid; gap: 15px; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); margin-bottom: 20px; }
+        .stat-item { background: #f8fafc; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #a29bfe; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; color: #a29bfe; }
+        .preset-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+        .preset-btn { padding: 8px 15px; background: #ddd6fe; color: #5b21b6; border: none; border-radius: 15px; cursor: pointer; font-size: 0.9rem; }
+        .preset-btn:hover { background: #c4b5fd; }
+        .error-message { background: #fed7d7; color: #c53030; padding: 15px; border-radius: 8px; margin-top: 10px; }
+    </style>
 </head>
 <body>
-    <h1>Regex Tester</h1>
-    <script src="script.js"></script>
+    <div class="container">
+        <div class="auth-placeholder">🔐 Google Authentication Ready</div>
+        <header class="tool-header">
+            <h1>🔍 Regex Tester</h1>
+            <p class="subtitle">Test and debug regular expressions with real-time matching</p>
+            <a href="../../index.html" class="back-home">← Back to Tools Directory</a>
+        </header>
+
+        <div class="tool-section">
+            <h3>🎯 Regular Expression</h3>
+            <div class="input-group">
+                <label for="regexInput">Enter your regex pattern:</label>
+                <input type="text" id="regexInput" placeholder="e.g., \d{3}-\d{3}-\d{4}" oninput="testRegex()">
+                <div class="flags-container">
+                    <div class="flag-checkbox">
+                        <input type="checkbox" id="flagGlobal" onchange="testRegex()">
+                        <label for="flagGlobal">Global (g)</label>
+                    </div>
+                    <div class="flag-checkbox">
+                        <input type="checkbox" id="flagIgnoreCase" onchange="testRegex()">
+                        <label for="flagIgnoreCase">Ignore Case (i)</label>
+                    </div>
+                    <div class="flag-checkbox">
+                        <input type="checkbox" id="flagMultiline" onchange="testRegex()">
+                        <label for="flagMultiline">Multiline (m)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📝 Test String</h3>
+            <div class="input-group">
+                <label for="testString">Enter text to test against:</label>
+                <textarea id="testString" placeholder="Enter your test string here..." rows="4" oninput="testRegex()"></textarea>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📊 Results</h3>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="matchCount">0</div>
+                    <div>Matches</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="groupCount">0</div>
+                    <div>Groups</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="isValid">✅</div>
+                    <div>Valid</div>
+                </div>
+            </div>
+            
+            <div class="results-container">
+                <div id="matchResults">Enter a regex pattern and test string to see matches</div>
+            </div>
+            
+            <div id="errorContainer"></div>
+        </div>
+
+        <div class="tool-section">
+            <h3>🚀 Quick Patterns</h3>
+            <div class="preset-buttons">
+                <button class="preset-btn" onclick="loadPreset('\\d{3}-\\d{3}-\\d{4}', 'Phone: 123-456-7890\\nInvalid: 12-34-5678')">Phone Number</button>
+                <button class="preset-btn" onclick="loadPreset('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}', 'Valid: user@example.com\\nInvalid: not-an-email')">Email</button>
+                <button class="preset-btn" onclick="loadPreset('https?://[^\\s]+', 'Link: https://example.com\\nSecure: https://secure.site.org')">URL</button>
+                <button class="preset-btn" onclick="loadPreset('\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b', 'IP: 192.168.1.1\\nInvalid: 999.999.999.999')">IP Address</button>
+                <button class="preset-btn" onclick="loadPreset('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$', 'Strong: MyPass123\\nWeak: password')">Strong Password</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testRegex() {
+            const regexInput = document.getElementById('regexInput').value;
+            const testString = document.getElementById('testString').value;
+            const matchResults = document.getElementById('matchResults');
+            const errorContainer = document.getElementById('errorContainer');
+            
+            // Clear previous errors
+            errorContainer.innerHTML = '';
+            
+            if (!regexInput) {
+                matchResults.innerHTML = 'Enter a regex pattern to start testing';
+                updateStats(0, 0, true);
+                return;
+            }
+
+            try {
+                // Build flags
+                let flags = '';
+                if (document.getElementById('flagGlobal').checked) flags += 'g';
+                if (document.getElementById('flagIgnoreCase').checked) flags += 'i';
+                if (document.getElementById('flagMultiline').checked) flags += 'm';
+
+                const regex = new RegExp(regexInput, flags);
+                const matches = [...testString.matchAll(regex)];
+                
+                updateStats(matches.length, getGroupCount(matches), true);
+                displayMatches(matches, testString);
+                
+            } catch (error) {
+                updateStats(0, 0, false);
+                displayError(error.message);
+                matchResults.innerHTML = 'Invalid regex pattern';
+            }
+        }
+
+        function updateStats(matchCount, groupCount, isValid) {
+            document.getElementById('matchCount').textContent = matchCount;
+            document.getElementById('groupCount').textContent = groupCount;
+            document.getElementById('isValid').textContent = isValid ? '✅' : '❌';
+        }
+
+        function getGroupCount(matches) {
+            if (matches.length === 0) return 0;
+            return Math.max(...matches.map(match => match.length - 1));
+        }
+
+        function displayMatches(matches, originalString) {
+            const matchResults = document.getElementById('matchResults');
+            
+            if (matches.length === 0) {
+                matchResults.innerHTML = '<div style="color: #666;">No matches found</div>';
+                return;
+            }
+
+            let html = '<div><strong>Matches found:</strong></div>';
+            
+            // Show highlighted text
+            let highlightedText = originalString;
+            let offset = 0;
+            
+            matches.forEach((match, index) => {
+                const startPos = match.index + offset;
+                const endPos = startPos + match[0].length;
+                const beforeHighlight = highlightedText.substring(0, startPos);
+                const highlighted = `<span class="match-highlight">${match[0]}</span>`;
+                const afterHighlight = highlightedText.substring(endPos);
+                
+                highlightedText = beforeHighlight + highlighted + afterHighlight;
+                offset += highlighted.length - match[0].length;
+            });
+            
+            html += `<div style="margin: 10px 0; padding: 10px; background: white; border-radius: 6px; font-family: 'Courier New', monospace;">${highlightedText}</div>`;
+            
+            // Show individual matches
+            matches.forEach((match, index) => {
+                html += `<div class="match-item">`;
+                html += `<strong>Match ${index + 1}:</strong> "${match[0]}" at position ${match.index}`;
+                if (match.length > 1) {
+                    html += `<div style="margin-top: 5px;">`;
+                    for (let i = 1; i < match.length; i++) {
+                        html += `<div>Group ${i}: "${match[i] || 'undefined'}"</div>`;
+                    }
+                    html += `</div>`;
+                }
+                html += `</div>`;
+            });
+            
+            matchResults.innerHTML = html;
+        }
+
+        function displayError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `<div class="error-message"><strong>Error:</strong> ${message}</div>`;
+        }
+
+        function loadPreset(pattern, testText) {
+            document.getElementById('regexInput').value = pattern;
+            document.getElementById('testString').value = testText;
+            
+            // Reset flags
+            document.getElementById('flagGlobal').checked = true;
+            document.getElementById('flagIgnoreCase').checked = false;
+            document.getElementById('flagMultiline').checked = false;
+            
+            testRegex();
+        }
+
+        console.log('Regex Tester loaded');
+    </script>
 </body>
 </html>

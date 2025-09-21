@@ -1,12 +1,144 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Binary converter</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Converter - Kedster's Static Cyber Tools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #6c5ce7, #a29bfe); min-height: 100vh; color: #333; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .auth-placeholder { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: white; }
+        .tool-header { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px; text-align: center; }
+        .tool-header h1 { font-size: 2.5rem; color: #6c5ce7; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; color: #666; margin-bottom: 20px; }
+        .back-home { display: inline-block; padding: 10px 20px; background: #6c5ce7; color: white; text-decoration: none; border-radius: 25px; transition: all 0.3s ease; }
+        .back-home:hover { background: #5f4fcf; transform: translateY(-2px); }
+        .tool-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .tool-section h3 { font-size: 1.5rem; color: #6c5ce7; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; }
+        .input-group input, .input-group textarea { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-family: 'Courier New', monospace; transition: all 0.3s ease; }
+        .input-group input:focus, .input-group textarea:focus { outline: none; border-color: #6c5ce7; box-shadow: 0 0 0 3px rgba(108,92,231,0.1); }
+        .action-buttons { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .action-btn { padding: 15px 25px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; color: white; }
+        .convert-btn { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+        .convert-btn:hover { background: linear-gradient(135deg, #5f4fcf, #9187fc); transform: translateY(-2px); }
+        .clear-btn { background: linear-gradient(135deg, #e17055, #fab1a0); }
+        .clear-btn:hover { background: linear-gradient(135deg, #d63031, #e84393); transform: translateY(-2px); }
+        .converter-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        .converter-item { background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #6c5ce7; }
+        .example-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+        .example-btn { padding: 8px 15px; background: #74b9ff; color: white; border: none; border-radius: 15px; cursor: pointer; font-size: 0.9rem; }
+        .example-btn:hover { background: #0984e3; }
+    </style>
 </head>
 <body>
-    <h1>Binary converter</h1>
-    <script src="script.js"></script>
+    <div class="container">
+        <div class="auth-placeholder">🔐 Google Authentication Ready</div>
+        <header class="tool-header">
+            <h1>🔢 Binary Converter</h1>
+            <p class="subtitle">Convert between binary, decimal, hexadecimal, and octal number systems</p>
+            <a href="../../index.html" class="back-home">← Back to Tools Directory</a>
+        </header>
+
+        <div class="tool-section">
+            <h3>🔤 Input</h3>
+            <div class="input-group">
+                <label for="inputValue">Enter number to convert:</label>
+                <input type="text" id="inputValue" placeholder="Enter a number..." oninput="convertAll()">
+            </div>
+            <div class="input-group">
+                <label for="inputBase">Input Base:</label>
+                <select id="inputBase" onchange="convertAll()" style="width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px;">
+                    <option value="10">Decimal (Base 10)</option>
+                    <option value="2">Binary (Base 2)</option>
+                    <option value="16">Hexadecimal (Base 16)</option>
+                    <option value="8">Octal (Base 8)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📋 Results</h3>
+            <div class="converter-grid">
+                <div class="converter-item">
+                    <label>Binary (Base 2):</label>
+                    <input type="text" id="binaryResult" readonly>
+                </div>
+                <div class="converter-item">
+                    <label>Decimal (Base 10):</label>
+                    <input type="text" id="decimalResult" readonly>
+                </div>
+                <div class="converter-item">
+                    <label>Hexadecimal (Base 16):</label>
+                    <input type="text" id="hexResult" readonly>
+                </div>
+                <div class="converter-item">
+                    <label>Octal (Base 8):</label>
+                    <input type="text" id="octalResult" readonly>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn clear-btn" onclick="clearAll()">🗑️ Clear All</button>
+            </div>
+        </div>
+
+        <div class="example-buttons">
+            <button class="example-btn" onclick="loadExample('255', '10')">Decimal 255</button>
+            <button class="example-btn" onclick="loadExample('11111111', '2')">Binary 11111111</button>
+            <button class="example-btn" onclick="loadExample('FF', '16')">Hex FF</button>
+            <button class="example-btn" onclick="loadExample('377', '8')">Octal 377</button>
+        </div>
+    </div>
+
+    <script>
+        function convertAll() {
+            const input = document.getElementById('inputValue').value.trim();
+            const inputBase = parseInt(document.getElementById('inputBase').value);
+            
+            if (!input) {
+                clearResults();
+                return;
+            }
+
+            try {
+                // Parse input according to selected base
+                const decimal = parseInt(input, inputBase);
+                if (isNaN(decimal)) {
+                    clearResults();
+                    return;
+                }
+
+                // Convert to all bases
+                document.getElementById('binaryResult').value = decimal.toString(2);
+                document.getElementById('decimalResult').value = decimal.toString(10);
+                document.getElementById('hexResult').value = decimal.toString(16).toUpperCase();
+                document.getElementById('octalResult').value = decimal.toString(8);
+            } catch (error) {
+                clearResults();
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('binaryResult').value = '';
+            document.getElementById('decimalResult').value = '';
+            document.getElementById('hexResult').value = '';
+            document.getElementById('octalResult').value = '';
+        }
+
+        function clearAll() {
+            document.getElementById('inputValue').value = '';
+            clearResults();
+        }
+
+        function loadExample(value, base) {
+            document.getElementById('inputValue').value = value;
+            document.getElementById('inputBase').value = base;
+            convertAll();
+        }
+
+        console.log('Binary Converter Tool loaded');
+    </script>
 </body>
 </html>
