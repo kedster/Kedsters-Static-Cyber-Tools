@@ -14,7 +14,10 @@
     "verify:dns": "node scripts/verify-cloudflare.js --dns",
     "verify:worker": "node scripts/verify-cloudflare.js --worker",
     "verify:homepage": "node scripts/verify-cloudflare.js --homepage",
-    "troubleshoot": "node scripts/verify-cloudflare.js --troubleshoot"
+    "troubleshoot": "node scripts/verify-cloudflare.js --troubleshoot",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -31,6 +34,8 @@
   "author": "Kedster",
   "license": "MIT",
   "devDependencies": {
+    "jest": "^30.1.3",
+    "jest-environment-jsdom": "^30.1.2",
     "wrangler": "^3.0.0"
   },
   "dependencies": {

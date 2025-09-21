@@ -12,6 +12,11 @@ dist/
 build/
 .cache/
 
+# Test artifacts
+coverage/
+*.lcov
+.nyc_output/
+
 # Environment variables
 .env
 .env.local
