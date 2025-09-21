@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Security Tester</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <h1>🛡️ API Security Tester</h1>
+        <p class="subtitle">Comprehensive REST API security testing and vulnerability assessment tool</p>
+        
+        <div class="warning-banner">
+            <strong>⚠️ Authorized Testing Only:</strong> Only test APIs you own or have explicit permission to test.
+        </div>
+
+        <div class="test-section">
+            <h3>API Endpoint Configuration</h3>
+            <div class="input-group">
+                <label for="apiUrl">API Endpoint URL:</label>
+                <input type="url" id="apiUrl" placeholder="https://api.example.com/v1/users" />
+            </div>
+            
+            <div class="method-headers-row">
+                <div class="input-group">
+                    <label for="httpMethod">HTTP Method:</label>
+                    <select id="httpMethod">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                        <option value="PATCH">PATCH</option>
+                        <option value="HEAD">HEAD</option>
+                        <option value="OPTIONS">OPTIONS</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="authType">Authentication:</label>
+                    <select id="authType">
+                        <option value="none">None</option>
+                        <option value="bearer">Bearer Token</option>
+                        <option value="apikey">API Key</option>
+                        <option value="basic">Basic Auth</option>
+                        <option value="oauth">OAuth 2.0 (Placeholder)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="auth-details" id="authDetails" style="display: none;">
+                <div class="input-group">
+                    <label id="authLabel">Authentication Value:</label>
+                    <input type="text" id="authValue" placeholder="Enter token/key/credentials" />
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="customHeaders">Custom Headers (JSON):</label>
+                <textarea id="customHeaders" rows="3" placeholder='{"Content-Type": "application/json", "X-API-Version": "1.0"}'></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label for="requestBody">Request Body (JSON):</label>
+                <textarea id="requestBody" rows="4" placeholder='{"name": "test", "email": "test@example.com"}'></textarea>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Security Test Suite</h3>
+            <div class="test-categories">
+                <div class="test-category">
+                    <h4>🔍 Information Disclosure</h4>
+                    <label><input type="checkbox" checked data-test="info-disclosure"> Server Headers Analysis</label>
+                    <label><input type="checkbox" checked data-test="error-disclosure"> Error Message Analysis</label>
+                    <label><input type="checkbox" checked data-test="debug-info"> Debug Information Check</label>
+                </div>
+                
+                <div class="test-category">
+                    <h4>🔐 Authentication & Authorization</h4>
+                    <label><input type="checkbox" checked data-test="auth-bypass"> Authentication Bypass</label>
+                    <label><input type="checkbox" checked data-test="token-validation"> Token Validation</label>
+                    <label><input type="checkbox" checked data-test="privilege-escalation"> Privilege Escalation</label>
+                </div>
+                
+                <div class="test-category">
+                    <h4>💉 Injection Attacks</h4>
+                    <label><input type="checkbox" checked data-test="sql-injection"> SQL Injection</label>
+                    <label><input type="checkbox" checked data-test="nosql-injection"> NoSQL Injection</label>
+                    <label><input type="checkbox" checked data-test="command-injection"> Command Injection</label>
+                </div>
+                
+                <div class="test-category">
+                    <h4>⚡ Rate Limiting & DoS</h4>
+                    <label><input type="checkbox" checked data-test="rate-limiting"> Rate Limiting Test</label>
+                    <label><input type="checkbox" checked data-test="dos-resilience"> DoS Resilience</label>
+                </div>
+            </div>
+            
+            <div class="test-controls">
+                <button id="startTests" onclick="startSecurityTests()" class="test-btn">Start Security Tests</button>
+                <button id="stopTests" onclick="stopSecurityTests()" class="stop-btn" disabled>Stop Tests</button>
+                <button onclick="loadTestAPI()" class="demo-btn">Load Demo API</button>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div class="test-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="testCount">0</div>
+                    <div class="stat-label">Tests Run</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="vulnerabilities">0</div>
+                    <div class="stat-label">Vulnerabilities</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="riskScore">0</div>
+                    <div class="stat-label">Risk Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="testTime">0</div>
+                    <div class="stat-label">Duration (s)</div>
+                </div>
+            </div>
+            
+            <div class="vulnerability-report" id="vulnerabilityReport">
+                <h4>🚨 Vulnerability Report</h4>
+                <div class="report-content" id="reportContent">
+                    No tests run yet. Click "Start Security Tests" to begin assessment.
+                </div>
+            </div>
+            
+            <div class="test-log" id="testLog"></div>
+        </div>
+
+        <div class="educational-info">
+            <h3>🎓 API Security Best Practices</h3>
+            <div class="best-practices">
+                <div class="practice-item">
+                    <strong>Authentication:</strong> Always use strong authentication mechanisms (OAuth 2.0, JWT) and validate tokens properly.
+                </div>
+                <div class="practice-item">
+                    <strong>Rate Limiting:</strong> Implement rate limiting to prevent abuse and DoS attacks.
+                </div>
+                <div class="practice-item">
+                    <strong>Input Validation:</strong> Sanitize and validate all input data to prevent injection attacks.
+                </div>
+                <div class="practice-item">
+                    <strong>HTTPS Only:</strong> Always use HTTPS to encrypt data in transit.
+                </div>
+                <div class="practice-item">
+                    <strong>Error Handling:</strong> Don't expose sensitive information in error messages.
+                </div>
+                <div class="practice-item">
+                    <strong>Logging & Monitoring:</strong> Log API access and monitor for suspicious patterns.
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
