@@ -1,12 +1,147 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Caesar cipher tool</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher Tool - Kedster's Static Cyber Tools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #74b9ff, #0984e3); min-height: 100vh; color: #333; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .auth-placeholder { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: white; }
+        .tool-header { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px; text-align: center; }
+        .tool-header h1 { font-size: 2.5rem; color: #74b9ff; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; color: #666; margin-bottom: 20px; }
+        .back-home { display: inline-block; padding: 10px 20px; background: #74b9ff; color: white; text-decoration: none; border-radius: 25px; transition: all 0.3s ease; }
+        .tool-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .tool-section h3 { font-size: 1.5rem; color: #74b9ff; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; }
+        .input-group input, .input-group textarea { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; transition: all 0.3s ease; }
+        .shift-control { display: flex; align-items: center; gap: 15px; }
+        .shift-input { flex: 1; }
+        .shift-display { background: #74b9ff; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; min-width: 80px; text-align: center; }
+        .action-buttons { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .action-btn { padding: 15px 25px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; color: white; }
+        .encrypt-btn { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+        .decrypt-btn { background: linear-gradient(135deg, #00b894, #55efc4); }
+        .clear-btn { background: linear-gradient(135deg, #e17055, #fab1a0); }
+        .result-group { position: relative; }
+        .result-group textarea { background: #f8fafc; font-family: 'Courier New', monospace; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; padding: 8px 12px; background: #74b9ff; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    </style>
 </head>
 <body>
-    <h1>Caesar cipher tool</h1>
-    <script src="script.js"></script>
+    <div class="container">
+        <div class="auth-placeholder">🔐 Google Authentication Ready</div>
+        <header class="tool-header">
+            <h1>🏛️ Caesar Cipher Tool</h1>
+            <p class="subtitle">Classical encryption cipher with customizable shift values</p>
+            <a href="../../index.html" class="back-home">← Back to Tools Directory</a>
+        </header>
+
+        <div class="tool-section">
+            <h3>🔤 Input</h3>
+            <div class="input-group">
+                <label for="inputText">Enter text to encrypt/decrypt:</label>
+                <textarea id="inputText" placeholder="Enter your text here..." rows="4" oninput="updateResult()"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label>Shift Value:</label>
+                <div class="shift-control">
+                    <input type="range" id="shiftSlider" min="1" max="25" value="3" class="shift-input" oninput="updateShift(); updateResult();">
+                    <div class="shift-display" id="shiftDisplay">3</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📋 Results</h3>
+            <div class="input-group">
+                <div class="result-group">
+                    <label for="encryptedResult">Encrypted (Caesar Cipher):</label>
+                    <textarea id="encryptedResult" readonly rows="4" placeholder="Encrypted result will appear here..."></textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('encryptedResult')">📋</button>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <div class="result-group">
+                    <label for="decryptedResult">Decrypted (Reverse Shift):</label>
+                    <textarea id="decryptedResult" readonly rows="4" placeholder="Decrypted result will appear here..."></textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('decryptedResult')">📋</button>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn clear-btn" onclick="clearAll()">🗑️ Clear All</button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="action-btn encrypt-btn" onclick="loadExample('Hello World!', 3)">Example: Hello World!</button>
+            <button class="action-btn encrypt-btn" onclick="loadExample('ATTACK AT DAWN', 13)">Example: Attack at Dawn</button>
+            <button class="action-btn encrypt-btn" onclick="loadExample('The quick brown fox', 7)">Example: Quick Brown Fox</button>
+        </div>
+    </div>
+
+    <script>
+        function caesarCipher(text, shift, encrypt = true) {
+            const direction = encrypt ? 1 : -1;
+            const actualShift = (shift * direction + 26) % 26;
+            
+            return text.replace(/[A-Za-z]/g, (char) => {
+                const start = char <= 'Z' ? 65 : 97;
+                const code = char.charCodeAt(0);
+                const shifted = ((code - start + actualShift) % 26) + start;
+                return String.fromCharCode(shifted);
+            });
+        }
+
+        function updateShift() {
+            const shift = document.getElementById('shiftSlider').value;
+            document.getElementById('shiftDisplay').textContent = shift;
+        }
+
+        function updateResult() {
+            const input = document.getElementById('inputText').value;
+            const shift = parseInt(document.getElementById('shiftSlider').value);
+            
+            if (!input.trim()) {
+                document.getElementById('encryptedResult').value = '';
+                document.getElementById('decryptedResult').value = '';
+                return;
+            }
+
+            const encrypted = caesarCipher(input, shift, true);
+            const decrypted = caesarCipher(input, shift, false);
+            
+            document.getElementById('encryptedResult').value = encrypted;
+            document.getElementById('decryptedResult').value = decrypted;
+        }
+
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('encryptedResult').value = '';
+            document.getElementById('decryptedResult').value = '';
+        }
+
+        function loadExample(text, shift) {
+            document.getElementById('inputText').value = text;
+            document.getElementById('shiftSlider').value = shift;
+            updateShift();
+            updateResult();
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            if (!element.value.trim()) return;
+            element.select();
+            document.execCommand('copy');
+        }
+
+        console.log('Caesar Cipher Tool loaded');
+    </script>
 </body>
 </html>

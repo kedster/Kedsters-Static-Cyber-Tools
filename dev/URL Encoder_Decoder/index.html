@@ -1,12 +1,137 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>URL Encoder_Decoder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder/Decoder - Kedster's Static Cyber Tools</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>URL Encoder_Decoder</h1>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <header class="tool-header">
+            <h1>🌐 URL Encoder/Decoder</h1>
+            <p class="subtitle">Encode and decode URLs for web security testing and safe URL handling</p>
+            <a href="../../index.html" class="back-home">← Back to Tools Directory</a>
+        </header>
+
+        <div class="warning-banner">
+            <strong>⚠️ Security Note:</strong> Always validate and sanitize URLs before using them in applications.
+        </div>
+
+        <div class="tool-section">
+            <h3>🔤 URL Input</h3>
+            <div class="input-group">
+                <label for="inputText">Enter URL or text to encode/decode:</label>
+                <textarea id="inputText" placeholder="Enter your URL or text here..." rows="4"></textarea>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn encode-btn" onclick="encodeURL()">
+                    📤 URL Encode
+                </button>
+                <button class="action-btn decode-btn" onclick="decodeURL()">
+                    📥 URL Decode
+                </button>
+                <button class="action-btn clear-btn" onclick="clearAll()">
+                    🗑️ Clear All
+                </button>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📋 Results</h3>
+            <div class="result-container">
+                <div class="result-group">
+                    <label for="encodedResult">URL Encoded:</label>
+                    <textarea id="encodedResult" readonly rows="4" placeholder="URL encoded result will appear here..."></textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('encodedResult')">📋 Copy</button>
+                </div>
+                
+                <div class="result-group">
+                    <label for="decodedResult">URL Decoded:</label>
+                    <textarea id="decodedResult" readonly rows="4" placeholder="URL decoded result will appear here..."></textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('decodedResult')">📋 Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>🔍 URL Analysis</h3>
+            <div class="url-analysis" id="urlAnalysis">
+                <div class="analysis-item">
+                    <label>Protocol:</label>
+                    <span id="urlProtocol">-</span>
+                </div>
+                <div class="analysis-item">
+                    <label>Host:</label>
+                    <span id="urlHost">-</span>
+                </div>
+                <div class="analysis-item">
+                    <label>Port:</label>
+                    <span id="urlPort">-</span>
+                </div>
+                <div class="analysis-item">
+                    <label>Path:</label>
+                    <span id="urlPath">-</span>
+                </div>
+                <div class="analysis-item">
+                    <label>Query:</label>
+                    <span id="urlQuery">-</span>
+                </div>
+                <div class="analysis-item">
+                    <label>Fragment:</label>
+                    <span id="urlFragment">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>📚 About URL Encoding</h3>
+            <div class="info-cards">
+                <div class="info-card">
+                    <h4>What is URL Encoding?</h4>
+                    <p>URL encoding (percent-encoding) is a mechanism to encode special characters in URLs by replacing them with a percent sign followed by their hexadecimal representation.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Common Use Cases</h4>
+                    <ul>
+                        <li>Safely transmitting data in URLs</li>
+                        <li>Handling special characters in query strings</li>
+                        <li>Web security testing and analysis</li>
+                        <li>API parameter encoding</li>
+                        <li>Form data submission</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Security Considerations</h4>
+                    <ul>
+                        <li>Prevent URL injection attacks</li>
+                        <li>Double encoding can bypass filters</li>
+                        <li>Always validate decoded URLs</li>
+                        <li>Watch for malicious redirects</li>
+                        <li>Check for homograph attacks</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples-section">
+            <h3>🎯 Quick Examples</h3>
+            <div class="example-buttons">
+                <button class="example-btn" onclick="loadExample('https://example.com/search?q=hello world&type=web')">Search URL</button>
+                <button class="example-btn" onclick="loadExample('admin@example.com?redirect=/admin')">Email with Redirect</button>
+                <button class="example-btn" onclick="loadExample('https://example.com/path with spaces/file.html')">Spaces in URL</button>
+                <button class="example-btn" onclick="loadExample('<script>alert(\"XSS\")</script>')">XSS Payload</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

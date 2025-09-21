@@ -1,12 +1,137 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hash Calculator (MD5, SHA1, SHA256)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Calculator - Kedster's Static Cyber Tools</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hash Calculator (MD5, SHA1, SHA256)</h1>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <header class="tool-header">
+            <h1>🔐 Hash Calculator</h1>
+            <p class="subtitle">Generate MD5, SHA-1, SHA-256 hashes for text and file integrity verification</p>
+            <a href="../../index.html" class="back-home">← Back to Tools Directory</a>
+        </header>
+
+        <div class="warning-banner">
+            <strong>⚠️ Security Notice:</strong> MD5 and SHA-1 are cryptographically broken. Use SHA-256 or higher for security purposes.
+        </div>
+
+        <div class="tool-section">
+            <h3>📝 Text Input</h3>
+            <div class="input-group">
+                <label for="inputText">Enter text to hash:</label>
+                <textarea id="inputText" placeholder="Enter your text here..." rows="4"></textarea>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn calculate-btn" onclick="calculateHashes()">
+                    🔒 Calculate Hashes
+                </button>
+                <button class="action-btn clear-btn" onclick="clearAll()">
+                    🗑️ Clear All
+                </button>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📁 File Upload</h3>
+            <div class="file-upload-area" id="fileUploadArea">
+                <div class="upload-content">
+                    <div class="upload-icon">📄</div>
+                    <p>Drag and drop a file here, or <button class="upload-btn" onclick="triggerFileUpload()">browse</button></p>
+                    <p class="upload-info">Maximum file size: 10MB</p>
+                    <input type="file" id="fileInput" hidden>
+                </div>
+            </div>
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <p><strong>File:</strong> <span id="fileName"></span></p>
+                <p><strong>Size:</strong> <span id="fileSize"></span></p>
+                <button class="action-btn calculate-btn" onclick="calculateFileHashes()">
+                    🔒 Calculate File Hashes
+                </button>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📋 Hash Results</h3>
+            <div class="hash-results">
+                <div class="hash-result">
+                    <label>MD5 (128-bit):</label>
+                    <div class="hash-output">
+                        <input type="text" id="md5Result" readonly placeholder="MD5 hash will appear here...">
+                        <button class="copy-btn" onclick="copyToClipboard('md5Result')">📋</button>
+                    </div>
+                    <div class="hash-info">⚠️ Cryptographically broken - legacy use only</div>
+                </div>
+                
+                <div class="hash-result">
+                    <label>SHA-1 (160-bit):</label>
+                    <div class="hash-output">
+                        <input type="text" id="sha1Result" readonly placeholder="SHA-1 hash will appear here...">
+                        <button class="copy-btn" onclick="copyToClipboard('sha1Result')">📋</button>
+                    </div>
+                    <div class="hash-info">⚠️ Cryptographically broken - legacy use only</div>
+                </div>
+                
+                <div class="hash-result">
+                    <label>SHA-256 (256-bit):</label>
+                    <div class="hash-output">
+                        <input type="text" id="sha256Result" readonly placeholder="SHA-256 hash will appear here...">
+                        <button class="copy-btn" onclick="copyToClipboard('sha256Result')">📋</button>
+                    </div>
+                    <div class="hash-info">✅ Cryptographically secure</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>📚 About Cryptographic Hashes</h3>
+            <div class="info-cards">
+                <div class="info-card">
+                    <h4>What are Hash Functions?</h4>
+                    <p>Cryptographic hash functions are mathematical algorithms that convert input data into a fixed-size string of bytes. The output is deterministic and appears random.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Common Uses</h4>
+                    <ul>
+                        <li>File integrity verification</li>
+                        <li>Password storage (with salt)</li>
+                        <li>Digital signatures</li>
+                        <li>Data deduplication</li>
+                        <li>Proof of work (blockchain)</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Security Properties</h4>
+                    <ul>
+                        <li><strong>One-way:</strong> Irreversible computation</li>
+                        <li><strong>Deterministic:</strong> Same input = same output</li>
+                        <li><strong>Avalanche effect:</strong> Small change = big difference</li>
+                        <li><strong>Collision resistance:</strong> Hard to find duplicates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples-section">
+            <h3>🎯 Quick Examples</h3>
+            <div class="example-buttons">
+                <button class="example-btn" onclick="loadExample('Hello World!')">Basic Text</button>
+                <button class="example-btn" onclick="loadExample('password123')">Password</button>
+                <button class="example-btn" onclick="loadExample('The quick brown fox jumps over the lazy dog')">Pangram</button>
+                <button class="example-btn" onclick="loadExample('')">Empty String</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,12 +1,241 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Password strength checker</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker - Kedster's Static Cyber Tools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #e84393, #fd79a8); min-height: 100vh; color: #333; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .auth-placeholder { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: white; }
+        .tool-header { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px; text-align: center; }
+        .tool-header h1 { font-size: 2.5rem; color: #e84393; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; color: #666; margin-bottom: 20px; }
+        .back-home { display: inline-block; padding: 10px 20px; background: #e84393; color: white; text-decoration: none; border-radius: 25px; transition: all 0.3s ease; }
+        .tool-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .tool-section h3 { font-size: 1.5rem; color: #e84393; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568; }
+        .input-group input { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; transition: all 0.3s ease; }
+        .toggle-visibility { position: absolute; right: 15px; top: 43px; cursor: pointer; color: #666; }
+        .strength-meter { height: 8px; background: #e2e8f0; border-radius: 4px; margin: 10px 0; overflow: hidden; }
+        .strength-fill { height: 100%; transition: all 0.3s ease; border-radius: 4px; }
+        .strength-weak { background: #e17055; width: 25%; }
+        .strength-fair { background: #fdcb6e; width: 50%; }
+        .strength-good { background: #00b894; width: 75%; }
+        .strength-strong { background: #00cec9; width: 100%; }
+        .strength-label { font-weight: 600; text-align: center; margin: 10px 0; }
+        .requirements { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .requirement { padding: 10px; border-radius: 6px; display: flex; align-items: center; gap: 10px; }
+        .requirement.met { background: #d1f2eb; color: #00695c; }
+        .requirement.unmet { background: #fadbd8; color: #c62828; }
+        .stats-grid { display: grid; gap: 15px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        .stat-item { background: #f8fafc; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #e84393; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; color: #e84393; }
+        .stat-label { font-size: 0.9rem; color: #666; }
+    </style>
 </head>
 <body>
-    <h1>Password strength checker</h1>
-    <script src="script.js"></script>
+    <div class="container">
+        <div class="auth-placeholder">🔐 Google Authentication Ready</div>
+        <header class="tool-header">
+            <h1>🔒 Password Strength Checker</h1>
+            <p class="subtitle">Analyze password strength and get security recommendations</p>
+            <a href="../../index.html" class="back-home">← Back to Tools Directory</a>
+        </header>
+
+        <div class="tool-section">
+            <h3>🔑 Password Input</h3>
+            <div class="input-group">
+                <label for="passwordInput">Enter password to analyze:</label>
+                <input type="password" id="passwordInput" placeholder="Enter your password..." oninput="analyzePassword()">
+                <span class="toggle-visibility" onclick="toggleVisibility()">👁️</span>
+            </div>
+            
+            <div class="strength-meter">
+                <div class="strength-fill" id="strengthFill"></div>
+            </div>
+            <div class="strength-label" id="strengthLabel">Enter a password to see its strength</div>
+        </div>
+
+        <div class="tool-section">
+            <h3>✅ Requirements</h3>
+            <div class="requirements" id="requirements">
+                <div class="requirement unmet" id="req-length">
+                    <span>❌</span> At least 8 characters
+                </div>
+                <div class="requirement unmet" id="req-uppercase">
+                    <span>❌</span> Contains uppercase letters
+                </div>
+                <div class="requirement unmet" id="req-lowercase">
+                    <span>❌</span> Contains lowercase letters
+                </div>
+                <div class="requirement unmet" id="req-numbers">
+                    <span>❌</span> Contains numbers
+                </div>
+                <div class="requirement unmet" id="req-special">
+                    <span>❌</span> Contains special characters
+                </div>
+                <div class="requirement unmet" id="req-no-common">
+                    <span>❌</span> Not a common password
+                </div>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📊 Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="lengthStat">0</div>
+                    <div class="stat-label">Characters</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="entropyStat">0</div>
+                    <div class="stat-label">Entropy (bits)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="timeStat">0s</div>
+                    <div class="stat-label">Crack Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="scoreStat">0/5</div>
+                    <div class="stat-label">Security Score</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const commonPasswords = ['password', '123456', 'password123', 'admin', 'qwerty', 'letmein', 'welcome', '123456789', 'password1'];
+        let isVisible = false;
+
+        function toggleVisibility() {
+            const input = document.getElementById('passwordInput');
+            const toggle = document.querySelector('.toggle-visibility');
+            isVisible = !isVisible;
+            input.type = isVisible ? 'text' : 'password';
+            toggle.textContent = isVisible ? '🙈' : '👁️';
+        }
+
+        function analyzePassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (!password) {
+                resetAnalysis();
+                return;
+            }
+
+            // Check requirements
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                numbers: /[0-9]/.test(password),
+                special: /[^A-Za-z0-9]/.test(password),
+                noCommon: !commonPasswords.includes(password.toLowerCase())
+            };
+
+            updateRequirements(requirements);
+            updateStats(password, requirements);
+            updateStrengthMeter(requirements);
+        }
+
+        function updateRequirements(req) {
+            const reqElements = {
+                'req-length': req.length,
+                'req-uppercase': req.uppercase,
+                'req-lowercase': req.lowercase,
+                'req-numbers': req.numbers,
+                'req-special': req.special,
+                'req-no-common': req.noCommon
+            };
+
+            Object.entries(reqElements).forEach(([id, met]) => {
+                const element = document.getElementById(id);
+                element.className = met ? 'requirement met' : 'requirement unmet';
+                element.querySelector('span').textContent = met ? '✅' : '❌';
+            });
+        }
+
+        function updateStats(password, req) {
+            document.getElementById('lengthStat').textContent = password.length;
+            
+            // Calculate entropy
+            let charsetSize = 0;
+            if (/[a-z]/.test(password)) charsetSize += 26;
+            if (/[A-Z]/.test(password)) charsetSize += 26;
+            if (/[0-9]/.test(password)) charsetSize += 10;
+            if (/[^A-Za-z0-9]/.test(password)) charsetSize += 32;
+            
+            const entropy = Math.log2(Math.pow(charsetSize, password.length));
+            document.getElementById('entropyStat').textContent = Math.round(entropy);
+
+            // Estimate crack time
+            const attempts = Math.pow(charsetSize, password.length) / 2;
+            const secondsPerAttempt = 1000000; // Assuming 1M attempts per second
+            const seconds = attempts / secondsPerAttempt;
+            document.getElementById('timeStat').textContent = formatTime(seconds);
+
+            // Calculate score
+            const score = Object.values(req).filter(Boolean).length;
+            document.getElementById('scoreStat').textContent = `${score}/6`;
+        }
+
+        function updateStrengthMeter(req) {
+            const score = Object.values(req).filter(Boolean).length;
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthLabel = document.getElementById('strengthLabel');
+
+            let strength, className;
+            if (score <= 2) {
+                strength = 'Very Weak';
+                className = 'strength-weak';
+            } else if (score <= 3) {
+                strength = 'Weak';
+                className = 'strength-fair';
+            } else if (score <= 4) {
+                strength = 'Good';
+                className = 'strength-good';
+            } else {
+                strength = 'Strong';
+                className = 'strength-strong';
+            }
+
+            strengthFill.className = `strength-fill ${className}`;
+            strengthLabel.textContent = `Password Strength: ${strength}`;
+        }
+
+        function formatTime(seconds) {
+            if (seconds < 60) return Math.round(seconds) + 's';
+            if (seconds < 3600) return Math.round(seconds / 60) + 'm';
+            if (seconds < 86400) return Math.round(seconds / 3600) + 'h';
+            if (seconds < 31536000) return Math.round(seconds / 86400) + 'd';
+            return Math.round(seconds / 31536000) + 'y';
+        }
+
+        function resetAnalysis() {
+            // Reset all requirements to unmet
+            ['req-length', 'req-uppercase', 'req-lowercase', 'req-numbers', 'req-special', 'req-no-common'].forEach(id => {
+                const element = document.getElementById(id);
+                element.className = 'requirement unmet';
+                element.querySelector('span').textContent = '❌';
+            });
+
+            // Reset stats
+            document.getElementById('lengthStat').textContent = '0';
+            document.getElementById('entropyStat').textContent = '0';
+            document.getElementById('timeStat').textContent = '0s';
+            document.getElementById('scoreStat').textContent = '0/6';
+
+            // Reset strength meter
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthLabel = document.getElementById('strengthLabel');
+            strengthFill.className = 'strength-fill';
+            strengthFill.style.width = '0%';
+            strengthLabel.textContent = 'Enter a password to see its strength';
+        }
+
+        console.log('Password Strength Checker loaded');
+    </script>
 </body>
 </html>

@@ -1,12 +1,106 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Base64 Encoder_Decoder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder/Decoder - Kedster's Static Cyber Tools</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Base64 Encoder_Decoder</h1>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <header class="tool-header">
+            <h1>🔢 Base64 Encoder/Decoder</h1>
+            <p class="subtitle">Encode and decode Base64 data for web security testing and data analysis</p>
+            <a href="../../index.html" class="back-home">← Back to Tools Directory</a>
+        </header>
+
+        <div class="warning-banner">
+            <strong>⚠️ Educational Tool:</strong> Use this tool for legitimate security testing and data analysis only.
+        </div>
+
+        <div class="tool-section">
+            <h3>🔤 Text Input</h3>
+            <div class="input-group">
+                <label for="inputText">Enter text to encode/decode:</label>
+                <textarea id="inputText" placeholder="Enter your text here..." rows="4"></textarea>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn encode-btn" onclick="encodeBase64()">
+                    📤 Encode to Base64
+                </button>
+                <button class="action-btn decode-btn" onclick="decodeBase64()">
+                    📥 Decode from Base64
+                </button>
+                <button class="action-btn clear-btn" onclick="clearAll()">
+                    🗑️ Clear All
+                </button>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📋 Results</h3>
+            <div class="result-container">
+                <div class="result-group">
+                    <label for="encodedResult">Base64 Encoded:</label>
+                    <textarea id="encodedResult" readonly rows="4" placeholder="Encoded result will appear here..."></textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('encodedResult')">📋 Copy</button>
+                </div>
+                
+                <div class="result-group">
+                    <label for="decodedResult">Decoded Text:</label>
+                    <textarea id="decodedResult" readonly rows="4" placeholder="Decoded result will appear here..."></textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('decodedResult')">📋 Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>📚 About Base64 Encoding</h3>
+            <div class="info-cards">
+                <div class="info-card">
+                    <h4>What is Base64?</h4>
+                    <p>Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format by translating it into a radix-64 representation.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Common Use Cases</h4>
+                    <ul>
+                        <li>Email attachments (MIME)</li>
+                        <li>Data URLs in web development</li>
+                        <li>JWT tokens and cookies</li>
+                        <li>Basic authentication headers</li>
+                        <li>Embedding images in CSS/HTML</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Security Notes</h4>
+                    <ul>
+                        <li>Base64 is <strong>not encryption</strong> - it's easily reversible</li>
+                        <li>Never use Base64 alone for security purposes</li>
+                        <li>Often used to obfuscate data in web applications</li>
+                        <li>Common target for security analysis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples-section">
+            <h3>🎯 Quick Examples</h3>
+            <div class="example-buttons">
+                <button class="example-btn" onclick="loadExample('Hello World!')">Basic Text</button>
+                <button class="example-btn" onclick="loadExample('admin:password')">Credentials</button>
+                <button class="example-btn" onclick="loadExample('{\"user\":\"admin\",\"role\":\"superuser\"}')">JSON Data</button>
+                <button class="example-btn" onclick="loadExample('<script>alert(\"XSS\")</script>')">HTML/Script</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
