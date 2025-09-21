@@ -1,5 +1,5 @@
 {
-  "name": "kedsters-static-cyber-tools",
+  "name": "cybertools",
   "version": "1.0.0",
   "type": "module",
   "description": "🛡️ Professional cybersecurity toolkit with 345+ tools: WHOIS lookup, DNS analysis, 2FA testing, API security, and more. Deployed on Cloudflare with unified directory structure for educational and professional use.",
@@ -31,7 +31,7 @@
     "cloudflare-workers",
     "cloudflare-pages"
   ],
-  "author": "Kedster",
+  "author": "CyberTools Team",
   "license": "MIT",
   "devDependencies": {
     "jest": "^30.1.3",

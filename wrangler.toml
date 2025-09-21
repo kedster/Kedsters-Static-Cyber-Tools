@@ -1,15 +1,15 @@
-name = "kedsters-static-cyber-tools"
+name = "cybertools"
 main = "src/index.js"
 compatibility_date = "2023-12-01"
 
 [env.production]
-name = "kedsters-static-cyber-tools"
+name = "cybertools"
 routes = [
-  { pattern = "cybertools.kedster.com/*", zone_name = "kedster.com" }
+  { pattern = "cybertools.snap-view.com/*", zone_name = "snap-view.com" }
 ]
 
 [env.development]
-name = "kedsters-static-cyber-tools-dev"
+name = "cybertools-dev"
 
 [[env.production.rules]]
 type = "ESModule"

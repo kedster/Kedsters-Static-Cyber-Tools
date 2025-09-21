@@ -1,4 +1,4 @@
-# 🛡️ Kedster's Static Cyber Tools
+# 🛡️ CyberTools
 
 Professional cybersecurity toolkit with 345+ tools: WHOIS lookup, DNS analysis, 2FA testing, API security, and more. Deployed on Cloudflare with unified directory structure for educational and professional use.
 

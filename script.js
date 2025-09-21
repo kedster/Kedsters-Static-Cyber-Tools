@@ -1,4 +1,4 @@
-// Kedster's Static Cyber Tools - Main Directory
+// CyberTools - Main Directory
 // Main landing page with tool directory functionality
 
 class ToolsDirectory {
