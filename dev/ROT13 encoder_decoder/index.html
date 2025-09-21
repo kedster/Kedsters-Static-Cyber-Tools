@@ -1,12 +1,116 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ROT13 encoder_decoder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROT13 Encoder/Decoder - Kedster's Static Cyber Tools</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>ROT13 encoder_decoder</h1>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <header class="tool-header">
+            <h1>🔄 ROT13 Encoder/Decoder</h1>
+            <p class="subtitle">Classic rotation cipher for educational cryptography and text obfuscation</p>
+            <a href="../../index.html" class="back-home">← Back to Tools Directory</a>
+        </header>
+
+        <div class="warning-banner">
+            <strong>⚠️ Educational Tool:</strong> ROT13 is not secure encryption - use only for learning and simple obfuscation.
+        </div>
+
+        <div class="tool-section">
+            <h3>🔤 Text Input</h3>
+            <div class="input-group">
+                <label for="inputText">Enter text to encode/decode with ROT13:</label>
+                <textarea id="inputText" placeholder="Enter your text here..." rows="4"></textarea>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn encode-btn" onclick="applyROT13()">
+                    🔄 Apply ROT13
+                </button>
+                <button class="action-btn clear-btn" onclick="clearAll()">
+                    🗑️ Clear All
+                </button>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>📋 Results</h3>
+            <div class="result-container">
+                <div class="result-group">
+                    <label for="resultText">ROT13 Result:</label>
+                    <textarea id="resultText" readonly rows="4" placeholder="ROT13 result will appear here..."></textarea>
+                    <button class="copy-btn" onclick="copyToClipboard('resultText')">📋 Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h3>🎯 ROT13 Cipher Wheel</h3>
+            <div class="cipher-wheel">
+                <div class="wheel-container">
+                    <div class="alphabet-wheel">
+                        <div class="wheel-row">
+                            <span class="wheel-label">Plain:</span>
+                            <div class="wheel-letters" id="plainAlphabet"></div>
+                        </div>
+                        <div class="wheel-row">
+                            <span class="wheel-label">ROT13:</span>
+                            <div class="wheel-letters" id="rot13Alphabet"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>📚 About ROT13 Cipher</h3>
+            <div class="info-cards">
+                <div class="info-card">
+                    <h4>What is ROT13?</h4>
+                    <p>ROT13 ("rotate by 13 places") is a simple letter substitution cipher that replaces each letter with the letter 13 positions ahead in the alphabet. It's its own inverse - applying ROT13 twice returns the original text.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Common Uses</h4>
+                    <ul>
+                        <li>Hiding spoilers in online forums</li>
+                        <li>Simple text obfuscation</li>
+                        <li>Educational cryptography examples</li>
+                        <li>Puzzle solutions and hints</li>
+                        <li>Basic string manipulation exercises</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Security Properties</h4>
+                    <ul>
+                        <li>Not cryptographically secure</li>
+                        <li>Easily broken by frequency analysis</li>
+                        <li>Preserves case and non-alphabetic characters</li>
+                        <li>Self-reciprocal (encoding = decoding)</li>
+                        <li>Part of the Caesar cipher family</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples-section">
+            <h3>🎯 Quick Examples</h3>
+            <div class="example-buttons">
+                <button class="example-btn" onclick="loadExample('Hello World!')">Basic Text</button>
+                <button class="example-btn" onclick="loadExample('The quick brown fox jumps over the lazy dog')">Pangram</button>
+                <button class="example-btn" onclick="loadExample('NOPQRSTUVWXYZABCDEFGHIJKLM')">ROT13 Alphabet</button>
+                <button class="example-btn" onclick="loadExample('Caesar cipher with rotation 13')">Cipher Text</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
