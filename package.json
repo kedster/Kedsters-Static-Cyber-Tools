@@ -2,7 +2,7 @@
   "name": "kedsters-static-cyber-tools",
   "version": "1.0.0",
   "type": "module",
-  "description": "Comprehensive cybersecurity testing and educational toolkit with unified directory structure",
+  "description": "🛡️ Professional cybersecurity toolkit with 345+ tools: WHOIS lookup, DNS analysis, 2FA testing, API security, and more. Deployed on Cloudflare with unified directory structure for educational and professional use.",
   "main": "src/index.js",
   "scripts": {
     "dev": "wrangler dev",
