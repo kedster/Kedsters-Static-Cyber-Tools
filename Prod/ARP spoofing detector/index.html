@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARP Spoofing Detector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <h1>🔍 ARP Spoofing Detector</h1>
+        <p class="subtitle">Network security tool for detecting ARP spoofing attacks and monitoring network integrity</p>
+        
+        <div class="warning-banner">
+            <strong>⚠️ Network Monitoring Tool:</strong> Use only on networks you own or have permission to monitor.
+        </div>
+
+        <div class="network-section">
+            <h3>Network Configuration</h3>
+            <div class="network-info">
+                <div class="info-card">
+                    <div class="info-label">Current Network</div>
+                    <div class="info-value" id="currentNetwork">Detecting...</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Gateway IP</div>
+                    <div class="info-value" id="gatewayIP">Detecting...</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Local IP</div>
+                    <div class="info-value" id="localIP">Detecting...</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Network Range</div>
+                    <div class="info-value" id="networkRange">Calculating...</div>
+                </div>
+            </div>
+            
+            <div class="manual-config">
+                <h4>Manual Configuration (Optional)</h4>
+                <div class="input-group">
+                    <label for="targetNetwork">Target Network (CIDR):</label>
+                    <input type="text" id="targetNetwork" placeholder="192.168.1.0/24" />
+                </div>
+                <div class="input-group">
+                    <label for="gatewayAddress">Gateway Address:</label>
+                    <input type="text" id="gatewayAddress" placeholder="192.168.1.1" />
+                </div>
+                <button onclick="updateNetworkConfig()" class="config-btn">Update Configuration</button>
+            </div>
+        </div>
+
+        <div class="monitoring-section">
+            <h3>ARP Monitoring</h3>
+            <div class="monitoring-controls">
+                <div class="control-group">
+                    <label for="scanMode">Monitoring Mode:</label>
+                    <select id="scanMode">
+                        <option value="passive">Passive Monitoring</option>
+                        <option value="active">Active Scanning</option>
+                        <option value="continuous">Continuous Watch</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="scanInterval">Scan Interval:</label>
+                    <select id="scanInterval">
+                        <option value="5">5 seconds</option>
+                        <option value="10" selected>10 seconds</option>
+                        <option value="30">30 seconds</option>
+                        <option value="60">1 minute</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="alertThreshold">Alert Threshold:</label>
+                    <select id="alertThreshold">
+                        <option value="1" selected>1 duplicate MAC</option>
+                        <option value="2">2 duplicate MACs</option>
+                        <option value="3">3 duplicate MACs</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="monitoring-buttons">
+                <button id="startMonitoring" onclick="startMonitoring()" class="start-btn">Start Monitoring</button>
+                <button id="stopMonitoring" onclick="stopMonitoring()" class="stop-btn" disabled>Stop Monitoring</button>
+                <button onclick="simulateAttack()" class="simulate-btn">Simulate Attack</button>
+            </div>
+        </div>
+
+        <div class="status-section">
+            <div class="status-cards">
+                <div class="status-card safe">
+                    <div class="status-icon">🛡️</div>
+                    <div class="status-text">
+                        <div class="status-title" id="networkStatus">Network Safe</div>
+                        <div class="status-subtitle" id="lastCheck">Never scanned</div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="devicesScanned">0</div>
+                        <div class="stat-label">Devices Scanned</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="anomaliesDetected">0</div>
+                        <div class="stat-label">Anomalies</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="monitoringTime">0m</div>
+                        <div class="stat-label">Monitoring Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <h3>ARP Table Analysis</h3>
+            <div class="table-container">
+                <table class="arp-table" id="arpTable">
+                    <thead>
+                        <tr>
+                            <th>IP Address</th>
+                            <th>MAC Address</th>
+                            <th>Vendor</th>
+                            <th>Last Seen</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="arpTableBody">
+                        <tr>
+                            <td colspan="6" class="no-data">Start monitoring to populate ARP table</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3>🚨 Security Alerts</h3>
+            <div class="alerts-container" id="alertsContainer">
+                <div class="no-alerts">No security alerts. Network appears normal.</div>
+            </div>
+        </div>
+
+        <div class="log-section">
+            <h3>Activity Log</h3>
+            <div class="activity-log" id="activityLog"></div>
+        </div>
+
+        <div class="educational-info">
+            <h3>🎓 ARP Spoofing Detection Guide</h3>
+            <div class="detection-methods">
+                <div class="method-item">
+                    <strong>MAC Address Conflicts:</strong> Multiple devices claiming the same IP with different MAC addresses.
+                </div>
+                <div class="method-item">
+                    <strong>Gratuitous ARP Analysis:</strong> Unexpected ARP announcements that could indicate spoofing attempts.
+                </div>
+                <div class="method-item">
+                    <strong>Gateway Monitoring:</strong> Special attention to gateway MAC address changes which are critical.
+                </div>
+                <div class="method-item">
+                    <strong>Vendor Analysis:</strong> Unusual or unknown device vendors appearing on the network.
+                </div>
+                <div class="method-item">
+                    <strong>Timing Patterns:</strong> Rapid changes in ARP entries that don't match normal network behavior.
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

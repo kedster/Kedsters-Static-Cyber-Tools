@@ -18,44 +18,44 @@ class ToolsDirectory {
                     path: 'Prod/DNS poisoning checker/index.html',
                     categories: ['network', 'analysis'],
                     features: 'Multi-server, Anomaly detection, Real-time monitoring'
-                }
-            ],
-            featured: [
+                },
                 {
                     name: '2FA Code Brute-Force Demo (Time-based)',
                     description: 'Educational TOTP brute force simulator with real-time code generation and multiple attack modes.',
-                    path: 'dev/2FA Code Brute-Force Demo (Time-based)/index.html',
+                    path: 'Prod/2FA Code Brute-Force Demo (Time-based)/index.html',
                     categories: ['authentication', 'testing'],
                     features: 'TOTP generation, Attack simulation, Educational insights'
                 },
                 {
                     name: 'API Security Tester',
                     description: 'Comprehensive REST API security testing suite with vulnerability detection and reporting.',
-                    path: 'dev/API security tester/index.html',
+                    path: 'Prod/API security tester/index.html',
                     categories: ['web', 'testing'],
                     features: '11 test categories, Multi-auth, Risk scoring'
                 },
                 {
                     name: 'ARP Spoofing Detector',
                     description: 'Network monitoring tool for detecting ARP spoofing attacks with real-time alerts.',
-                    path: 'dev/ARP spoofing detector/index.html',
+                    path: 'Prod/ARP spoofing detector/index.html',
                     categories: ['network', 'analysis'],
                     features: 'Real-time monitoring, Attack simulation, Vendor analysis'
                 },
                 {
                     name: 'Access Control Matrix Tester',
                     description: 'Role-based access control testing environment with client-side role mocking.',
-                    path: 'dev/Access Control Matrix Tester (Client Role Mocks)/index.html',
+                    path: 'Prod/Access Control Matrix Tester (Client Role Mocks)/index.html',
                     categories: ['authentication', 'testing'],
                     features: 'Role simulation, Permission testing, Security insights'
                 },
                 {
                     name: 'Access Control Matrix Manager',
                     description: 'Visual access control management system with role/resource CRUD operations.',
-                    path: 'dev/Access control matrix/index.html',
+                    path: 'Prod/Access control matrix/index.html',
                     categories: ['authentication', 'analysis'],
                     features: 'Visual matrix, Export/Import, Validation tools'
                 }
+            ],
+            featured: [
             ],
             development: []
         };

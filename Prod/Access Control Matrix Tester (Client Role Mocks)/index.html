@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Control Matrix Tester</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-placeholder" id="authPlaceholder">
+            <div class="auth-info">🔐 Google Authentication Ready</div>
+        </div>
+        
+        <h1>🔐 Access Control Matrix Tester</h1>
+        <p class="subtitle">Role-based access control testing with client-side role mocking and permission validation</p>
+        
+        <div class="warning-banner">
+            <strong>⚠️ Testing Environment:</strong> This tool simulates access control scenarios for security testing and education.
+        </div>
+
+        <div class="user-section">
+            <h3>User Authentication & Role Assignment</h3>
+            <div class="current-user">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">👤</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Guest User</div>
+                        <div class="user-role" id="userRole">No Role Assigned</div>
+                        <div class="user-permissions" id="userPermissions">No Permissions</div>
+                    </div>
+                </div>
+                <button onclick="showLoginModal()" class="login-btn">Login / Switch Role</button>
+            </div>
+        </div>
+
+        <div class="matrix-section">
+            <h3>Access Control Matrix</h3>
+            <div class="matrix-container">
+                <table class="access-matrix" id="accessMatrix">
+                    <thead>
+                        <tr>
+                            <th>Resource / Action</th>
+                            <th>Guest</th>
+                            <th>User</th>
+                            <th>Moderator</th>
+                            <th>Admin</th>
+                            <th>Super Admin</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matrixBody">
+                        <!-- Matrix will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="testing-section">
+            <h3>Permission Testing</h3>
+            <div class="test-controls">
+                <div class="resource-selector">
+                    <label for="testResource">Select Resource:</label>
+                    <select id="testResource">
+                        <option value="">-- Choose Resource --</option>
+                    </select>
+                </div>
+                
+                <div class="action-selector">
+                    <label for="testAction">Select Action:</label>
+                    <select id="testAction">
+                        <option value="">-- Choose Action --</option>
+                    </select>
+                </div>
+                
+                <button onclick="testPermission()" class="test-btn">Test Permission</button>
+                <button onclick="runFullTest()" class="full-test-btn">Run Full Access Test</button>
+            </div>
+            
+            <div class="test-result" id="testResult"></div>
+        </div>
+
+        <div class="results-section">
+            <div class="test-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalTests">0</div>
+                    <div class="stat-label">Tests Run</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="allowedAccess">0</div>
+                    <div class="stat-label">Allowed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="deniedAccess">0</div>
+                    <div class="stat-label">Denied</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="vulnerabilities">0</div>
+                    <div class="stat-label">Vulnerabilities</div>
+                </div>
+            </div>
+            
+            <div class="test-log" id="testLog"></div>
+        </div>
+
+        <!-- Login Modal -->
+        <div class="modal" id="loginModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>🔐 User Authentication</h4>
+                    <span class="close" onclick="hideLoginModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="login-form">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" placeholder="Enter username" />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" placeholder="Enter password" />
+                        </div>
+                        <div class="form-group">
+                            <label for="roleSelect">Role (for testing):</label>
+                            <select id="roleSelect">
+                                <option value="guest">Guest</option>
+                                <option value="user">User</option>
+                                <option value="moderator">Moderator</option>
+                                <option value="admin">Admin</option>
+                                <option value="superadmin">Super Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button onclick="performLogin()" class="login-submit-btn">Login</button>
+                            <button onclick="hideLoginModal()" class="cancel-btn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="educational-info">
+            <h3>🎓 Access Control Security Principles</h3>
+            <div class="principles">
+                <div class="principle-item">
+                    <strong>Principle of Least Privilege:</strong> Users should only have the minimum permissions necessary to perform their tasks.
+                </div>
+                <div class="principle-item">
+                    <strong>Role-Based Access Control (RBAC):</strong> Permissions are assigned to roles, and roles are assigned to users.
+                </div>
+                <div class="principle-item">
+                    <strong>Separation of Duties:</strong> Critical operations should require multiple users or approval workflows.
+                </div>
+                <div class="principle-item">
+                    <strong>Defense in Depth:</strong> Multiple layers of access control should be implemented.
+                </div>
+                <div class="principle-item">
+                    <strong>Regular Access Reviews:</strong> Permissions should be regularly audited and updated.
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
