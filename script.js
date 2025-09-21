@@ -225,22 +225,27 @@ class ToolsDirectory {
     renderToolsSection(containerId, tools, type) {
         const container = document.getElementById(containerId);
         
-        // Apply filters if needed
+        // Apply category filter to all tool types
         let filteredTools = tools;
-        if (this.currentFilter !== 'all' && type === 'development') {
+        if (this.currentFilter !== 'all') {
             filteredTools = tools.filter(tool => 
-                tool.categories.includes(this.currentFilter)
+                tool.categories && tool.categories.includes(this.currentFilter)
             );
         }
         
-        if (this.searchTerm && type === 'development') {
+        // Apply search filter to all tool types
+        if (this.searchTerm) {
+            const searchLower = this.searchTerm.toLowerCase();
             filteredTools = filteredTools.filter(tool =>
-                tool.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                tool.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+                tool.name.toLowerCase().includes(searchLower) ||
+                tool.description.toLowerCase().includes(searchLower) ||
+                (tool.features && tool.features.toLowerCase().includes(searchLower)) ||
+                (tool.categories && tool.categories.some(cat => cat.toLowerCase().includes(searchLower)))
             );
         }
 
-        if (filteredTools.length === 0 && type === 'development') {
+        // Show no results message for all sections when filtering is active
+        if (filteredTools.length === 0 && (this.searchTerm || this.currentFilter !== 'all')) {
             container.innerHTML = '<div class="no-results">No tools found matching your criteria.</div>';
             return;
         }
@@ -274,19 +279,19 @@ class ToolsDirectory {
     }
 
     setupEventListeners() {
-        // Search functionality
+        // Search functionality - now applies to all tool sections
         document.getElementById('searchInput').addEventListener('input', (e) => {
             this.searchTerm = e.target.value;
-            this.renderToolsSection('devTools', this.tools.development, 'development');
+            this.renderAllTools(); // Re-render all sections
         });
 
-        // Filter functionality
+        // Filter functionality - now applies to all tool sections
         document.querySelectorAll('.filter-tag').forEach(tag => {
             tag.addEventListener('click', (e) => {
                 document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
                 e.target.classList.add('active');
                 this.currentFilter = e.target.dataset.category;
-                this.renderToolsSection('devTools', this.tools.development, 'development');
+                this.renderAllTools(); // Re-render all sections
             });
         });
     }
