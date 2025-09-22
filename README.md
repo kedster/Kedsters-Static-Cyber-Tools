@@ -48,7 +48,7 @@ Comprehensive REST API vulnerability testing:
 ```bash
 # Clone and start local server
 git clone <repository-url>
-cd Kedsters-Static-Cyber-Tools
+cd CyberTools
 python3 -m http.server 8000
 
 # Access at http://localhost:8000

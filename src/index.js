@@ -1,5 +1,5 @@
 /**
- * Kedster's Static Cyber Tools - Cloudflare Worker
+ * CyberTools - Cloudflare Worker
  * Handles routing and serves the unified directory structure
  */
 
@@ -151,7 +151,7 @@ async function getDirectoryPage() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kedster's Static Cyber Tools - Directory</title>
+    <title>CyberTools - Professional Security Toolkit</title>
     <style>
         /* Inline critical CSS for faster loading */
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
@@ -180,7 +180,7 @@ async function getDirectoryPage() {
         <div class="auth-placeholder">🔐 Google Authentication Ready</div>
         
         <header>
-            <h1>🛡️ Kedster's Static Cyber Tools</h1>
+            <h1>🛡️ CyberTools</h1>
             <p class="subtitle">Comprehensive cybersecurity testing and educational toolkit</p>
         </header>
 
@@ -249,7 +249,7 @@ async function getDirectoryPage() {
     
     <script>
         // Add worker identification to console
-        console.log('%c🛡️ Kedster\'s Static Cyber Tools', 'font-size: 20px; color: #667eea; font-weight: bold;');
+        console.log('%c🛡️ CyberTools', 'font-size: 20px; color: #667eea; font-weight: bold;');
         console.log('%cPowered by Cloudflare Workers', 'color: #3498db;');
         console.log('Worker: kedsters-static-cyber-tools v1.0.0');
         

@@ -420,4 +420,4 @@ function initializeCookieBanner() {
     cookieManager.checkConsent();
 }
 
-console.log('Kedster\'s Static Cyber Tools Directory loaded');
+console.log('CyberTools Directory loaded');
