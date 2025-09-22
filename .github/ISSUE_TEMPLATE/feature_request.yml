@@ -1,0 +1,43 @@
+---
+name: Feature Request
+about: Suggest an idea for CyberTools
+title: '[FEATURE] '
+labels: ['enhancement']
+assignees: ''
+
+---
+
+**Is your feature request related to a problem? Please describe.**
+A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+
+**Describe the solution you'd like**
+A clear and concise description of what you want to happen.
+
+**Describe alternatives you've considered**
+A clear and concise description of any alternative solutions or features you've considered.
+
+**Which category would this feature fit in?**
+- [ ] Authentication & Access Control
+- [ ] Network Security
+- [ ] Web Application Security
+- [ ] Analysis & Forensics
+- [ ] Testing & Simulation
+- [ ] General Platform Improvement
+
+**Tool Type**
+- [ ] New Production Tool
+- [ ] New Development Tool
+- [ ] Enhancement to Existing Tool
+- [ ] Platform/UI Improvement
+
+**Use Case**
+Describe the specific cybersecurity use case this feature would address.
+
+**Educational Value**
+How would this feature help with cybersecurity education or professional development?
+
+**Additional context**
+Add any other context, mockups, or examples about the feature request here.
+
+**Security Considerations**
+Any security implications or ethical use considerations for this feature.
