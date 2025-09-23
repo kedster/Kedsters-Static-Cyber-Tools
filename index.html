@@ -3,59 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kedster's Static Cyber Tools - Directory</title>
+    <meta name="description" content="CyberTools - Professional cybersecurity toolkit with 345+ tools including WHOIS lookup, DNS analysis, 2FA testing, and API security testing.">
+    <meta name="keywords" content="cybersecurity, penetration testing, security tools, WHOIS, DNS, 2FA, API security">
+    <meta name="author" content="CyberTools Team">
+    <title>CyberTools - Professional Security Toolkit</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <div class="container">
-        <div class="auth-placeholder" id="authPlaceholder">
+        <div class="auth-placeholder" id="authPlaceholder" aria-label="Authentication status">
             <div class="auth-info">🔐 Google Authentication Ready</div>
         </div>
         
-        <header class="main-header">
-            <h1>🛡️ Kedster's Static Cyber Tools</h1>
-            <p class="subtitle">Comprehensive cybersecurity testing and educational toolkit</p>
-        </header>
+        <main id="main-content">
+            <header class="main-header">
+                <h1>🛡️ CyberTools</h1>
+                <p class="subtitle">Professional cybersecurity testing and educational toolkit</p>
+            </header>
 
-        <div class="tools-directory">
-            <div class="section-header">
-                <h2>🚀 Production Tools</h2>
-                <p>Fully operational cybersecurity tools ready for professional use</p>
-            </div>
+            <div class="tools-directory">
+                <section class="section-header">
+                    <h2>🚀 Production Tools</h2>
+                    <p>Fully operational cybersecurity tools ready for professional use</p>
+                </section>
             
-            <div class="tools-grid" id="productionTools">
+            <div class="tools-grid" id="productionTools" role="list" aria-label="Production ready cybersecurity tools">
                 <!-- Production tools will be populated by JavaScript -->
             </div>
 
-            <div class="section-header">
+            <section class="section-header">
                 <h2>🔬 Featured Development Tools</h2>
                 <p>Advanced cybersecurity tools with comprehensive functionality</p>
-            </div>
+            </section>
             
-            <div class="tools-grid featured-tools" id="featuredTools">
+            <div class="tools-grid featured-tools" id="featuredTools" role="list" aria-label="Featured development tools">
                 <!-- Featured dev tools will be populated by JavaScript -->
             </div>
 
-            <div class="section-header">
+            <section class="section-header">
                 <h2>⚡ Development Tools</h2>
                 <p>Extensive collection of cybersecurity tools in development</p>
-            </div>
+            </section>
             
             <div class="search-section">
                 <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search tools..." />
-                    <div class="filter-tags">
-                        <span class="filter-tag active" data-category="all">All</span>
-                        <span class="filter-tag" data-category="authentication">Authentication</span>
-                        <span class="filter-tag" data-category="network">Network</span>
-                        <span class="filter-tag" data-category="web">Web Security</span>
-                        <span class="filter-tag" data-category="analysis">Analysis</span>
-                        <span class="filter-tag" data-category="testing">Testing</span>
+                    <label for="searchInput" class="visually-hidden">Search cybersecurity tools</label>
+                    <input type="text" id="searchInput" placeholder="Search tools..." aria-describedby="search-help" />
+                    <div id="search-help" class="visually-hidden">Type to filter the tools below by name or description</div>
+                    <div class="filter-tags" role="tablist" aria-label="Filter tools by category">
+                        <button class="filter-tag active" data-category="all" role="tab" aria-selected="true">All</button>
+                        <button class="filter-tag" data-category="authentication" role="tab" aria-selected="false">Authentication</button>
+                        <button class="filter-tag" data-category="network" role="tab" aria-selected="false">Network</button>
+                        <button class="filter-tag" data-category="web" role="tab" aria-selected="false">Web Security</button>
+                        <button class="filter-tag" data-category="analysis" role="tab" aria-selected="false">Analysis</button>
+                        <button class="filter-tag" data-category="testing" role="tab" aria-selected="false">Testing</button>
                     </div>
                 </div>
             </div>
             
-            <div class="tools-grid dev-tools" id="devTools">
+            <div class="tools-grid dev-tools" id="devTools" role="list" aria-label="Development cybersecurity tools">
                 <!-- Development tools will be populated by JavaScript -->
             </div>
         </div>
@@ -74,11 +83,24 @@
                 <div class="stat-label">In Development</div>
             </div>
         </div>
+        </main>
 
         <footer class="main-footer">
-            <p>&copy; 2024 Kedster's Static Cyber Tools - Educational and Professional Cybersecurity Toolkit</p>
+            <p>&copy; 2024 CyberTools - Educational and Professional Cybersecurity Toolkit</p>
             <p>⚠️ Use these tools responsibly and only on systems you own or have permission to test</p>
+            <p><a href="privacy-policy.html">Privacy Policy</a> | <a href="terms-of-service.html">Terms of Service</a></p>
         </footer>
+
+        <!-- Cookie Banner -->
+        <div id="cookieBanner" class="cookie-banner" style="display: none;">
+            <div class="cookie-content">
+                <p>🍪 We use minimal cookies and privacy-conscious analytics to improve our tools. <a href="privacy-policy.html">Learn more</a></p>
+                <div class="cookie-buttons">
+                    <button id="acceptCookies" class="btn-accept">Accept</button>
+                    <button id="declineCookies" class="btn-decline">Decline</button>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

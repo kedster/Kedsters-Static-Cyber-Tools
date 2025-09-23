@@ -1,0 +1,68 @@
+---
+name: Tool Request
+about: Request a new cybersecurity tool for CyberTools
+title: '[TOOL REQUEST] '
+labels: ['tool-request', 'enhancement']
+assignees: ''
+
+---
+
+**Tool Name**
+What should this tool be called?
+
+**Tool Description**
+A clear and concise description of what this cybersecurity tool should do.
+
+**Tool Category**
+- [ ] Authentication & Access Control
+- [ ] Network Security  
+- [ ] Web Application Security
+- [ ] Analysis & Forensics
+- [ ] Testing & Simulation
+
+**Target Audience**
+- [ ] Security Professionals
+- [ ] Students/Learners
+- [ ] Penetration Testers
+- [ ] Developers
+- [ ] IT Administrators
+
+**Similar Tools**
+Are there existing tools that do something similar? How would this be different?
+
+**Use Cases**
+Describe 2-3 specific scenarios where this tool would be useful:
+1. 
+2. 
+3. 
+
+**Input/Output**
+- **Input:** What would users provide to the tool?
+- **Output:** What would the tool produce?
+
+**Priority Level**
+- [ ] Critical - Essential for security workflows
+- [ ] High - Very useful for common tasks
+- [ ] Medium - Nice to have for specific scenarios
+- [ ] Low - Interesting but not urgent
+
+**Technical Requirements**
+Any specific technical considerations:
+- [ ] Requires external APIs
+- [ ] Client-side only processing
+- [ ] Real-time functionality
+- [ ] File upload/processing
+- [ ] Database storage needed
+
+**Educational Value**
+How would this tool help users learn about cybersecurity?
+
+**Ethical Use Statement**
+Confirm this tool would be designed for:
+- [ ] Educational purposes
+- [ ] Authorized testing only
+- [ ] Defensive security
+- [ ] Legitimate security research
+
+**Additional Context**
+Add any other context, links to documentation, or examples.

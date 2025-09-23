@@ -1,4 +1,4 @@
-# 🛡️ Kedster's Static Cyber Tools
+# 🛡️ CyberTools
 
 Professional cybersecurity toolkit with 345+ tools: WHOIS lookup, DNS analysis, 2FA testing, API security, and more. Deployed on Cloudflare with unified directory structure for educational and professional use.
 
@@ -48,7 +48,7 @@ Comprehensive REST API vulnerability testing:
 ```bash
 # Clone and start local server
 git clone <repository-url>
-cd Kedsters-Static-Cyber-Tools
+cd CyberTools
 python3 -m http.server 8000
 
 # Access at http://localhost:8000

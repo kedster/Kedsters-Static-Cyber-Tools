@@ -20,7 +20,7 @@ class ToolFrame {
         }
         
         // Update document title
-        document.title = `${this.toolName} - Kedster's Static Cyber Tools`;
+        document.title = `${this.toolName} - CyberTools`;
     }
 
     setupNavigation() {

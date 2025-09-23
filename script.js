@@ -1,4 +1,4 @@
-// Kedster's Static Cyber Tools - Main Directory
+// CyberTools - Main Directory
 // Main landing page with tool directory functionality
 
 class ToolsDirectory {
@@ -256,7 +256,7 @@ class ToolsDirectory {
         ).join('');
 
         return `
-            <div class="tool-card ${type}" onclick="navigateToTool('${tool.path}')">
+            <div class="tool-card ${type}" role="listitem">
                 <div class="tool-header">
                     <div>
                         <div class="tool-title">${tool.name}</div>
@@ -264,9 +264,12 @@ class ToolsDirectory {
                     <div class="tool-status ${type}">${type}</div>
                 </div>
                 <div class="tool-description">${tool.description}</div>
-                <div class="tool-categories">${categories}</div>
+                <div class="tool-categories" aria-label="Tool categories">${categories}</div>
                 <div class="tool-footer">
-                    <a href="${tool.path}" class="tool-link" onclick="event.stopPropagation()">Open Tool</a>
+                    <a href="${tool.path}" 
+                       class="tool-link" 
+                       aria-label="Open ${tool.name} tool"
+                       onclick="event.stopPropagation()">Open Tool</a>
                     <div class="tool-features">${tool.features}</div>
                 </div>
             </div>
@@ -280,13 +283,27 @@ class ToolsDirectory {
             this.renderToolsSection('devTools', this.tools.development, 'development');
         });
 
-        // Filter functionality
+        // Filter functionality - updated to work with buttons
         document.querySelectorAll('.filter-tag').forEach(tag => {
             tag.addEventListener('click', (e) => {
-                document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                // Update active state and aria-selected
+                document.querySelectorAll('.filter-tag').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
                 e.target.classList.add('active');
+                e.target.setAttribute('aria-selected', 'true');
+                
                 this.currentFilter = e.target.dataset.category;
                 this.renderToolsSection('devTools', this.tools.development, 'development');
+            });
+            
+            // Add keyboard navigation
+            tag.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    tag.click();
+                }
             });
         });
     }
@@ -308,6 +325,99 @@ function navigateToTool(path) {
 // Initialize the directory
 document.addEventListener('DOMContentLoaded', () => {
     new ToolsDirectory();
+    initializeCookieBanner();
 });
 
-console.log('Kedster\'s Static Cyber Tools Directory loaded');
+// Cookie Banner Management
+class CookieManager {
+    constructor() {
+        this.cookieAccepted = this.getCookie('cookieConsent');
+        this.analyticsEnabled = false;
+    }
+
+    getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    setCookie(name, value, days) {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax;Secure`;
+    }
+
+    acceptCookies() {
+        this.setCookie('cookieConsent', 'accepted', 365);
+        this.cookieAccepted = 'accepted';
+        this.analyticsEnabled = true;
+        this.hideBanner();
+        this.initializeAnalytics();
+    }
+
+    declineCookies() {
+        this.setCookie('cookieConsent', 'declined', 365);
+        this.cookieAccepted = 'declined';
+        this.analyticsEnabled = false;
+        this.hideBanner();
+    }
+
+    showBanner() {
+        const banner = document.getElementById('cookieBanner');
+        if (banner) {
+            banner.style.display = 'block';
+        }
+    }
+
+    hideBanner() {
+        const banner = document.getElementById('cookieBanner');
+        if (banner) {
+            banner.style.display = 'none';
+        }
+    }
+
+    initializeAnalytics() {
+        if (this.analyticsEnabled && this.cookieAccepted === 'accepted') {
+            // Initialize privacy-conscious analytics (Plausible or similar)
+            console.log('Analytics initialized (privacy-conscious)');
+            
+            // Example: Initialize Plausible Analytics
+            // const script = document.createElement('script');
+            // script.defer = true;
+            // script.data-domain = 'cybertools.snap-view.com';
+            // script.src = 'https://plausible.io/js/script.js';
+            // document.head.appendChild(script);
+        }
+    }
+
+    checkConsent() {
+        if (!this.cookieAccepted) {
+            this.showBanner();
+        } else if (this.cookieAccepted === 'accepted') {
+            this.analyticsEnabled = true;
+            this.initializeAnalytics();
+        }
+    }
+}
+
+function initializeCookieBanner() {
+    const cookieManager = new CookieManager();
+    
+    // Setup event listeners for cookie banner buttons
+    const acceptBtn = document.getElementById('acceptCookies');
+    const declineBtn = document.getElementById('declineCookies');
+    
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', () => cookieManager.acceptCookies());
+    }
+    
+    if (declineBtn) {
+        declineBtn.addEventListener('click', () => cookieManager.declineCookies());
+    }
+    
+    // Check if we need to show the banner
+    cookieManager.checkConsent();
+}
+
+console.log('CyberTools Directory loaded');
